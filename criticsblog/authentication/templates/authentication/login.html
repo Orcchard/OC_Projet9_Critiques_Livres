@@ -1,0 +1,46 @@
+{% load static %}
+
+<!DOCTYPE html>
+<html lang="fr">
+
+<head>
+    <meta charset="UTF-8">
+    <title>LITReview - Connexion</title>
+    <link rel="stylesheet" href="{% static 'authentication/style.css' %}">
+</head>
+
+<body>
+
+    {% if not user.is_authenticated %}
+    <div class="container">
+        <!-- Titre principal -->
+        <h1>LITReview</h1>
+        <p class="subtitle">Connectez-vous pour continuer</p>
+
+        <!-- Affichage des erreurs du formulaire -->
+        {% if form.errors %}
+        <div class="form-errors">
+            {{ form.errors }}
+        </div>
+        {% endif %}
+
+        <!-- Formulaire de connexion -->
+        <form method="post">
+            {% csrf_token %}
+            {{ form.as_p }}
+            <button type="submit" class="button">Se connecter</button>
+        </form>
+
+        <!-- Lien vers la page signup -->
+        <div class="link">
+            Pas encore inscrit ? <a href="{% url 'signup' %}">S'inscrire</a>
+        </div>
+    </div>
+
+    {% else %}
+    <p>Vous êtes déjà connecté !</p>
+    {% endif %}
+
+</body>
+
+</html>
