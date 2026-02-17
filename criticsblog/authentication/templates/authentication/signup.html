@@ -15,14 +15,37 @@
 
         <form method="post">
             {% csrf_token %}
-            {{ form.as_p }}
-            <button type="submit">S'inscrire</button>
-        </form>
+            
+            <div class="form-group">
+                {{ form.username.label_tag }}
+                {{ form.username }}
+                {% if form.username.errors %}
+                    <div class="error">{{ form.username.errors }}</div>
+                {% endif %}
+            </div>
+            
+            <div class="form-group">
+                {{ form.password1.label_tag }}
+                {{ form.password1 }}
+                {% if form.password1.errors %}
+                    <div class="error">{{ form.password1.errors }}</div>
+                {% endif %}
+            </div>
 
-        <div class="link">
-            Déjà inscrit ? <a href="{% url 'login' %}">Connectez-vous</a>
+            <div class="form-group">
+                {{ form.password2.label_tag }}
+                {{ form.password2 }}
+                {% if form.password2.errors %}
+                    <div class="error">{{ form.password2.errors }}</div>
+                {% endif %}
+            </div>
+
+            <div class="action-buttons">
+                    <a href="{% url 'login' %}" class="btn-back">Retourner</a>
+                    <button type="submit" class="btn-login">S'inscrire</button>
+                </div>
+            </form>
         </div>
     </div>
 </body>
-
 </html>

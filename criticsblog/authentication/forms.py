@@ -1,22 +1,20 @@
 from django import forms
-from django.contrib.auth.models import User
+from django.contrib.auth import get_user_model
 from django.contrib.auth.forms import AuthenticationForm
+from django.contrib.auth.forms import UserCreationForm
+from . import models
 
 
-class SignUpForm(forms.ModelForm):
-    password = forms.CharField(widget=forms.PasswordInput)
+class SignUpForm(UserCreationForm):
+    """Missing"""
+    class Meta(UserCreationForm.Meta):
+        """Missing"""
+        model = get_user_model()
+        fields = ('username',)
 
-    class Meta:
-        model = User
-        fields = ['username', 'password']
 
-
-class LoginForm(AuthenticationForm):
-    username = forms.CharField(
-        label="Nom d'utilisateur",
-        widget=forms.TextInput(attrs={'class': 'input-field'}))
+class LoginForm(forms.Form):
+    username = forms.CharField(max_length=63, label='Nom d’utilisateur')
     password = forms.CharField(
-        label="Mot de passe",
-        widget=forms.PasswordInput(attrs={'class': 'input-field'})
+        max_length=63, widget=forms.PasswordInput, label='Mot de passe'
     )
-    attrs = {'class': 'input-field'}
