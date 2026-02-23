@@ -14,14 +14,29 @@ body {
     padding: 20px;
 }
 
+.container {
+    max-width: 500px;
+    /* Largeur max de la boîte */
+    width: 100%;
+    /* S’adapte aux petits écrans */
+    background-color: white;
+    /* Fond blanc */
+    padding: 40px;
+    /* Espacement intérieur */
+    border: 2px solid black;
+    /* Bordure noire carrée */
+    margin: 0 auto;
+    /* Centre horizontalement */
+}
+
 /* Conteneur principal 2 colonnes */
 .split-container {
     display: flex;
-    width: 900px;
+    width: 800px;
     max-width: 100%;
     background-color: white;
     border-radius: 8px;
-    box-shadow: 0 4px 12px rgba(0, 0, 0, 0.15);
+    box-shadow: 0 4px 12px rgba(1, 0, 0, 0.15);
     overflow: hidden;
 }
 
