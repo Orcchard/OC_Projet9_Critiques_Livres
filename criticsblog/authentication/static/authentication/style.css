@@ -16,59 +16,13 @@ body {
 
 .container {
     max-width: 500px;
-    /* Largeur max de la boîte */
     width: 100%;
-    /* S’adapte aux petits écrans */
     background-color: white;
-    /* Fond blanc */
     padding: 40px;
-    /* Espacement intérieur */
     border: 2px solid black;
-    /* Bordure noire carrée */
     margin: 0 auto;
-    /* Centre horizontalement */
 }
 
-/* Conteneur principal 2 colonnes */
-.split-container {
-    display: flex;
-    width: 800px;
-    max-width: 100%;
-    background-color: white;
-    border-radius: 8px;
-    box-shadow: 0 4px 12px rgba(1, 0, 0, 0.15);
-    overflow: hidden;
-}
-
-/* Section gauche - PLUS DE FOND NOIR */
-.left-section {
-    flex: 1;
-    background-color: #f8f9fa;
-    /* Gris très clair au lieu de noir */
-    padding: 50px 30px;
-    display: flex;
-    flex-direction: column;
-    justify-content: center;
-    align-items: flex-start;
-    border-right: 1px solid #e0e0e0;
-}
-
-.left-section h1 {
-    font-size: 28px;
-    margin-bottom: 15px;
-    color: #333;
-    /* Gris foncé au lieu de blanc */
-}
-
-.left-section h2 {
-    font-size: 20px;
-    margin-bottom: 30px;
-    color: #666;
-    /* Gris moyen */
-    font-weight: normal;
-}
-
-/* Bouton S'inscrire - PLUS DE FOND NOIR */
 .btn-signup {
     background-color: #e0e0e0;
     /* Gris clair */
