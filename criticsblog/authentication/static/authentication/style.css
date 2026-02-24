@@ -1,63 +1,104 @@
+/* RESET GLOBAL */
 * {
     margin: 0;
     padding: 0;
     box-sizing: border-box;
 }
 
+/* BODY */
 body {
     font-family: Arial, sans-serif;
     background-color: #f5f5f5;
-    display: flex;
-    justify-content: center;
-    align-items: center;
     min-height: 100vh;
-    padding: 20px;
+    padding: 0;
+    /* pas de padding global pour que le header touche les bords */
 }
 
-.container {
-    max-width: 500px;
+/* HEADER - LITReview */
+.header {
     width: 100%;
+    text-align: center;
+    font-size: 28px;
+    font-weight: bold;
+    padding: 15px 0;
+    border-bottom: 2px solid #ccc;
+    /* ligne de séparation sous le header */
     background-color: white;
-    padding: 40px;
+    margin-bottom: 20px;
+    /* espace avant le split-container */
+}
+
+/* CONTAINER PRINCIPAL */
+.split-container {
+    display: flex;
+    width: 1000px;
+    max-width: 1000px;
+    min-height: 80vh;
     border: 2px solid black;
+    /* encadré visible */
+    box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
     margin: 0 auto;
+    /* centre horizontalement */
+}
+
+/* SECTION GAUCHE - INSCRIPTION */
+.left-section {
+    flex: 1;
+    /* boîte noire */
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: flex-start;
+    padding: 70px 30px;
+    position: relative;
+}
+
+.left-section h2 {
+    font-size: 24px;
+    margin-bottom: 20px;
 }
 
 .btn-signup {
     background-color: #e0e0e0;
     /* Gris clair */
     color: #333;
-    padding: 12px 30px;
+    padding: 10px 30px;
     text-decoration: none;
     border-radius: 4px;
     font-weight: bold;
     display: inline-block;
     border: 1px solid #ccc;
     transition: all 0.3s;
+    position: absolute;
+    top: 140px;
+    /* aligne le bouton à la même hauteur que le champ "Nom d'utilisateur" */
+    left: 30px;
 }
 
 .btn-signup:hover {
     background-color: #d0d0d0;
-    /* Gris un peu plus foncé au survol */
+    /* Gris un peu plus foncé */
     border-color: #999;
 }
 
-/* Section droite */
+/* SECTION DROITE - CONNEXION */
 .right-section {
     flex: 1;
-    padding: 50px 30px;
-    background-color: white;
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    padding: 60px 30px;
 }
 
 .right-section h2 {
     font-size: 24px;
-    margin-bottom: 25px;
+    margin-bottom: 30px;
     color: #333;
 }
 
-/* Formulaire */
+/* FORMULAIRE */
 .form-group {
-    margin-bottom: 20px;
+    margin-bottom: 30px;
     text-align: left;
 }
 
@@ -74,7 +115,7 @@ body {
     border: 1px solid #ddd;
     border-radius: 4px;
     font-size: 16px;
-    background-color: #fafafa;
+    background-color: #d0d0d0;
 }
 
 .form-group input:focus {
@@ -83,55 +124,41 @@ body {
     background-color: #fff;
 }
 
-/* Conteneur des boutons - Retourner à gauche, Se connecter à droite */
+/* BOUTONS */
 .action-buttons {
     display: flex;
-    justify-content: space-between;
+    justify-content: flex-end;
     align-items: center;
     gap: 15px;
     margin-top: 25px;
 }
 
-/* Bouton Retourner - à gauche */
-.btn-back {
+
+.btn-login {
+    display: inline-block;
+    /* permet à width/min-width de fonctionner */
+    min-width: 220px;
+    /* largeur minimale */
+    padding: 12px 60px;
+    /* espace intérieur horizontal et vertical */
     background-color: #e0e0e0;
     color: #333;
-    padding: 12px 20px;
-    text-decoration: none;
+    border: 1px solid #ccc;
     border-radius: 4px;
     font-size: 16px;
     text-align: center;
-    border: 1px solid #ccc;
-    flex: 1;
-    /* Prend l'espace disponible */
+    box-sizing: border-box;
+    /* padding inclus dans la largeur totale */
     transition: all 0.3s;
 }
 
-.btn-back:hover {
-    background-color: #d0d0d0;
-    border-color: #999;
-}
-
-/* Bouton Se connecter - à droite */
-.btn-login {
-    background-color: #e0e0e0;
-    color: #333;
-    padding: 12px 20px;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    font-size: 16px;
-    cursor: pointer;
-    flex: 1;
-    /* Prend l'espace disponible */
-    transition: all 0.3s;
-}
 
 .btn-login:hover {
     background-color: #d0d0d0;
     border-color: #999;
 }
 
-/* Messages d'erreur */
+/* MESSAGE D'ERREUR */
 .alert {
     padding: 10px;
     background-color: #ffebee;
@@ -141,23 +168,23 @@ body {
     border: 1px solid #ffcdd2;
 }
 
-/* Responsive */
+/* RESPONSIVE */
 @media (max-width: 768px) {
     .split-container {
         flex-direction: column;
+        min-height: auto;
     }
 
-    .left-section {
-        border-right: none;
-        border-bottom: 1px solid #e0e0e0;
+    .left-section,
+    .right-section {
+        flex: none;
+        width: 100%;
+        padding: 30px 20px;
     }
 
     .action-buttons {
         flex-direction: column;
+        gap: 10x;
     }
 
-    .btn-back,
-    .btn-login {
-        width: 100%;
-    }
 }

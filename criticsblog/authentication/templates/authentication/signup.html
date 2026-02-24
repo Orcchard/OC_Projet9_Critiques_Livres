@@ -5,16 +5,17 @@
     <meta charset="UTF-8">
     <title>LITReview </title>
     {% load static %}
-    <link rel="stylesheet" href="{% static 'authentication/style.css' %}">
+    <link rel="stylesheet" href="{% static 'authentication/signupstyle.css' %}">
 </head>
 
-
 <body>
+    <body>
+    <header class="header">
+        LITReview
+    </header>
     <div class="container">
-        <h2>LITReview</h2>
-        
+        <h1>LITReview</h1>
         <p class="subtitle">Inscrivez-vous maintenant</p>
-
         <form method="post">
             {% csrf_token %}
             
@@ -45,9 +46,8 @@
             <div class="action-buttons">
                     <a href="{% url 'login' %}" class="btn-back">Retourner</a>
                     <button type="submit" class="btn-login">S'inscrire</button>
-                </div>
-            </form>
-        </div>
+            </div>
+        </form>
     </div>
 </body>
 </html>

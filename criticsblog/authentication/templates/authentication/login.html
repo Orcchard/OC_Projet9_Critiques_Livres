@@ -6,13 +6,16 @@
     {% load static %}
     <link rel="stylesheet" href="{% static 'authentication/style.css' %}">
 </head>
+
 <body>
-    <div class="container">
+    <header class="header">
+        LITReview
+    </header>
+
     <div class="split-container">
         <!-- SECTION GAUCHE - Inscription (boîte noire) -->
         <div class="left-section">
-            <h1>LITReview</h1>
-            <h2>Inscrivez-vous</h2>
+            <h2>Inscrivez-vous maintenant</h2>
             <a href="{% url 'signup' %}" class="btn-signup">S'inscrire</a>
         </div>
 
@@ -26,7 +29,7 @@
                 {% endfor %}
             {% endif %}
 
-            <form method="post" autocomplete="off">>
+            <form method="post" autocomplete="off">
                 {% csrf_token %}
                 
                 <div class="form-group">
@@ -39,7 +42,9 @@
                     <input type="password" name="password" id="password" required>
                 </div>
 
-                <button type="submit">Se connecter</button>
+                <div class="action-buttons">
+                    <button type="submit" class="btn-login">Se connecter</button>
+                </div>   
             </form>
         </div>
     </div>
