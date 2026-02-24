@@ -5,17 +5,16 @@
     <meta charset="UTF-8">
     <title>LITReview </title>
     {% load static %}
-    <link rel="stylesheet" href="{% static 'authentication/signupstyle.css' %}">
+    <link rel="stylesheet" href="{% static 'authentication/mixt.css' %}">
 </head>
 
 <body>
-    <body>
     <header class="header">
         LITReview
     </header>
+    
     <div class="container">
-        <h1>LITReview</h1>
-        <p class="subtitle">Inscrivez-vous maintenant</p>
+        <p class="subtitle">Inscrivez-vous</p>
         <form method="post">
             {% csrf_token %}
             
@@ -43,9 +42,9 @@
                 {% endif %}
             </div>
 
-            <div class="action-buttons">
+            <div class="action-buttons-signup">
                     <a href="{% url 'login' %}" class="btn-back">Retourner</a>
-                    <button type="submit" class="btn-login">S'inscrire</button>
+                    <button type="submit" class="btn-login-signup">S'inscrire</button>
             </div>
         </form>
     </div>
