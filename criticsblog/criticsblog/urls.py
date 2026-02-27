@@ -17,6 +17,8 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path, include
 from authentication.views import signup_page, login_page, home, logout_user
+from litreview.views import 
+
 
 urlpatterns = [
     path('admin/', admin.site.urls),
@@ -24,4 +26,5 @@ urlpatterns = [
     path("login/", login_page, name="login"),
     path('', home, name='home'),
     path('logout/', logout_user, name='logout'),
+    path('new')
 ]
