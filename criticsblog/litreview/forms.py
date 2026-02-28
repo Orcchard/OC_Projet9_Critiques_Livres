@@ -13,3 +13,24 @@ class CreateTicket(forms.ModelForm):
         """Missing"""
         model = models.Ticket
         fields = ["title", "description", "image"]
+
+
+class CreateReview(forms.ModelForm):
+    headline = forms.CharField(label="Title", required=True)
+    body = forms.CharField(label="Comment", max_length=8192, widget=forms.Textarea, required=True)
+    rating = forms.ChoiceField(
+        initial=3,
+        label="Rate this book",
+        widget=forms.RadioSelect(attrs={'class': 'inline'}),
+        required=True,
+        choices=(
+            (1, "1 star"),
+            (2, "2 stars"),
+            (3, "3 stars"),
+            (4, "4 stars"),
+            (5, '5 stars'))
+        )
+
+    class Meta:
+        model = models.Review
+        fields = ["headline", "rating", "body"]
