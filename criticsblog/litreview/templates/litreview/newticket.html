@@ -1,0 +1,16 @@
+{%extends "base.html"%}
+{% block content %}
+
+
+<body>
+    
+    <p> Créer un ticket</p>
+    <form method="post" enctype="multipart/form-data" novalidate>
+                {% csrf_token %}
+                {{ ticket_form.as_p }}
+    <input type="submit" value="Envoyer">
+    <a href="{% url 'home' %}">Retour</a>
+        </form>
+{% endblock %}
+
+

@@ -34,7 +34,9 @@ def login_page(request):
             user = authenticate(request, username=username, password=password)
             if user is not None:
                 login(request, user)
-                return redirect("home")  # ou "accueil" selon votre URL
+                # return redirect("home")  # ou "accueil" selon votre URL
+                next_url = request.GET.get('next', 'home')
+                return redirect(next_url)
             else:
                 # Identifiants incorrects
                 messages.error(request, "Nom d'utilisateur ou mot de passe incorrect")
