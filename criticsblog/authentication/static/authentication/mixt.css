@@ -15,7 +15,7 @@ body {
 .header {
     width: 100%;
     text-align: center;
-    font-size: 28px;
+    font-size: 22px;
     font-weight: bold;
     padding: 15px 0;
     border-bottom: 2px solid #ccc;
@@ -43,6 +43,7 @@ body {
     background-color: #d0d0d0;
     border-color: #999;
 }
+
 
 /* ===== STYLES DES FORMULAIRES (communs) ===== */
 .form-group {
@@ -125,10 +126,15 @@ body {
     color: #333;
 }
 
+/* Bouton aligné à droite */
 .action-buttons {
     display: flex;
     justify-content: flex-end;
     margin-top: 25px;
+}
+
+.action-buttons .btn {
+    padding: 12px 40px;
 }
 
 .btn-login {
@@ -148,13 +154,50 @@ body {
     border-color: #999;
 }
 
-/* ===== PAGE D'INSCRIPTION ===== */
+/* ===== PAGE D'INSCRIPTION mon encadrement principal */
 .container {
-    width: 500px;
+    width: 1000px;
     margin: 0 auto;
     padding: 40px;
     border: 2px solid black;
     background-color: white;
+    min-height: 80vh;
+    /* prend toute la hauteur de l’écran */
+}
+
+.container p {
+    display: flex;
+    flex-direction: column;
+    /* label au-dessus du champ */
+    margin-bottom: 20px;
+    /* espace entre les champs */
+    align-items: center;
+    /* centre horizontalement le champ */
+}
+
+/* Label aligné à gauche du champ */
+.container p label {
+    align-self: flex-start;
+    /* label à gauche */
+    margin-left: 2cm;
+    /* 2 cm depuis le bord du champ */
+    margin-bottom: 5px;
+    /* petit espace sous le label */
+    font-weight: bold;
+}
+
+/* Champ centré et long */
+.container p input,
+.container p textarea {
+    width: calc(100% - 4cm);
+    /* 2 cm de chaque côté */
+    max-width: 100%;
+    padding: 8px;
+    box-sizing: border-box;
+    display: block;
+    margin: 0 auto;
+    font-size: 16px;
+    /* centre le champ */
 }
 
 .subtitle {

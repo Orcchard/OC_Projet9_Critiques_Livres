@@ -5,7 +5,7 @@ from . import models
 
 class CreateTicket(forms.ModelForm):
     """Missing"""
-    title = forms.CharField(label="Title of the book", max_length=128, required=True)
+    title = forms.CharField(label="Titre du livre", max_length=128, required=True)
     description = forms.CharField(max_length=2048, widget=forms.Textarea, required=True)
     image = forms.ImageField(required=True)
 
@@ -13,14 +13,17 @@ class CreateTicket(forms.ModelForm):
         """Missing"""
         model = models.Ticket
         fields = ["title", "description", "image"]
+        labels = {
+            'image': 'Télécharger fichier',
+        }
 
 
 class CreateReview(forms.ModelForm):
-    headline = forms.CharField(label="Title", required=True)
-    body = forms.CharField(label="Comment", max_length=8192, widget=forms.Textarea, required=True)
+    headline = forms.CharField(label="Titre", required=True)
+    body = forms.CharField(label="Commentaire", max_length=8192, widget=forms.Textarea, required=True)
     rating = forms.ChoiceField(
         initial=3,
-        label="Rate this book",
+        label="Notez ce livre",
         widget=forms.RadioSelect(attrs={'class': 'inline'}),
         required=True,
         choices=(

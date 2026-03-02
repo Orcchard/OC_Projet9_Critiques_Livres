@@ -2,19 +2,17 @@
 {% block content %}
     
 <div class="container">
-    <p class="create_text">Créer un ticket</p>
+    <p class="create_text">Créer une critique</p>
 
     <form method="post" enctype="multipart/form-data" novalidate>
         {% csrf_token %}
         <!-- champs générés par Django -->
-        {{ ticket_form.as_p }}
+        {{ review_form.as_p }}
+        {{ review_form.as_p }}
         <!-- bouton Envoyer aligné à droite -->
         <div class="action-buttons">            
-        <input type="submit" value="Envoyer le ticket" class="btn">
+        <input type="submit" value="Envoyer la review" class="btn">
         </div>
     </form>
 </div>
-
 {% endblock %}
-
-

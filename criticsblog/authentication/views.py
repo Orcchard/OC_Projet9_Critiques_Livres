@@ -1,12 +1,12 @@
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth import authenticate, login, logout
+from django.contrib import messages
 from django.conf import settings
 from django.shortcuts import render, redirect
-from django.contrib.auth import authenticate, login, logout
+from litreview.models import Ticket
+from litreview.forms import CreateTicket
+
 from .forms import SignUpForm, LoginForm
-from django.contrib.auth.decorators import login_required
-from django.contrib import messages
-
-
-from . import forms
 
 
 def signup_page(request):
@@ -50,7 +50,9 @@ def login_page(request):
 
 @login_required
 def home(request):
-    return render(request, "authentication/home.html")
+    # récupère tous les tickets
+    tickets = Ticket.objects.all()
+    return render(request, "authentication/home.html", {'tickets': tickets})
 
 
 def logout_user(request):
