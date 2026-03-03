@@ -28,4 +28,5 @@ urlpatterns = [
     path('logout/', logout_user, name='logout'),
     path('ticket/newticket/', newticket_page, name='newticket'),
     path('review/newreview/', newreview_page, name='newreview'),
+    
 ]

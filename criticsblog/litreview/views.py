@@ -17,10 +17,9 @@ def newticket_page(request):
             ticket.user = request.user
             ticket.save()
             return redirect('home')  # remplacer par le nom de la vue cible
-    else:
-        form = forms.CreateTicket()
-    return render(request, 'litreview/newticket.html', {'ticket_form': form})
-
+        else:
+            form = forms.CreateTicket()
+        return render(request, 'litreview/newticket.html', {'ticket_form': form})
 
 @login_required
 def newreview_page(request):
@@ -29,13 +28,28 @@ def newreview_page(request):
 
     if request.method == 'POST':
         # créer une instance de notre formulaire et le remplir des données POST
-        form = forms.CreateReview(request.POST, request.FILES)
-        if form.is_valid():
-            review = form.save(commit=False)
-            review.user = request.user  # On associe la review à un objet User déjà existant en base.
-            review.save()
-            return redirect('home')  # remplacer par le nom de la vue cible
-    else:
-        form = forms.CreateReview()
-    return render(request, 'litreview/newreview.html', {'review_form': form})
+        form_ticket = forms.CreateTicket(request.POST, request.FILES)
+        form_review = forms.CreateReview(request.POST)
 
+        # sauvegarde du ticket
+        if form_ticket.is_valid() and form_review.is_valid():
+            ticket = form_ticket.save(commit=False)
+            ticket.user = request.user
+            ticket.reply = True
+            ticket.save()
+
+        # sauvegarde de la review
+            review = form_review.save(commit=False)
+            review.ticket = ticket
+            review.user = request.user
+            review.save()
+            return redirect('home')
+
+    else:
+        # Initialisation des formulaires pour GET
+        form_ticket = forms.CreateTicket()
+        form_review = forms.CreateReview()
+
+        # affichage des formulaires (GET ou POST invalide)
+    context = {'ticket_form': form_ticket, 'review_form': form_review}
+    return render(request, 'litreview/newreview.html', context)

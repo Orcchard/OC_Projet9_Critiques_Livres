@@ -7,7 +7,7 @@
     <form method="post" enctype="multipart/form-data" novalidate>
         {% csrf_token %}
         <!-- champs générés par Django -->
-        {{ review_form.as_p }}
+        {{ ticket_form.as_p }}
         {{ review_form.as_p }}
         <!-- bouton Envoyer aligné à droite -->
         <div class="action-buttons">            
