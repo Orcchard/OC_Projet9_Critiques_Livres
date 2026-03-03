@@ -200,6 +200,38 @@ body {
     /* centre le champ */
 }
 
+/* ===== SCORE HORIZONTAL POUR LES REVIEWS ===== */
+.inline {
+    list-style: none;
+    /* supprime les puces du ul */
+    padding: 0;
+    /* supprime padding par défaut */
+    margin: 0;
+    /* espace vertical autour */
+    display: flex;
+    /* aligne horizontalement */
+    gap: 80px;
+    /* espace entre chaque bouton */
+}
+
+.inline li label {
+    display: flex;
+    align-items: center;
+    /* aligne bouton et label verticalement */
+    gap: 5px;
+    /* espace entre radio et texte */
+}
+
+.tickets-section {
+    margin-bottom: 30px;
+    /* espace sous les tickets */
+}
+
+.reviews-section {
+    margin-top: 30px;
+    /* optionnel, espace au-dessus */
+}
+
 .subtitle {
     font-size: 24px;
     font-weight: bold;
@@ -271,9 +303,5 @@ body {
     .container {
         width: 90%;
         padding: 20px;
-    }
-
-    .action-buttons-signup {
-        flex-direction: column;
     }
 }

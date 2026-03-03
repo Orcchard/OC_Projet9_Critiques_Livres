@@ -3,24 +3,37 @@
 {% block content %}
 <div class="container">
     <p> Bonjour:  {{ user.username }} </p>
+    <!-- Liens utiles -->
     
+
+    <div class="tickets-section">
     <h2>Liste des tickets</h2>
     {% if tickets %}
         <ul>
         {% for ticket in tickets %}
-            <li>{{ ticket.title }}</li>
+            <li>{{ ticket.title }} </li>
         {% endfor %}
         </ul>
     {% else %}
         <p>Aucun ticket enregistré.</p>
     {% endif %}
+    </div> 
 
-    <!-- Liens utiles -->
-    <div class="action-buttons-signup">
-        <a href="{% url 'logout' %}">Se déconnecter</a>
-        <a href="{% url 'newticket' %}">Créer un ticket</a>
-        <a href="{% url 'newreview' %}">Créer une revue</a>
-    </div>
-</div>    
+    <div class="reviews-section">
+    <h2>Liste des reviews</h2>
 
+    {% if reviews %}
+        <ul>
+        {% for review in reviews %}
+            <li>
+                {{ review.headline }} - Note : {{ review.rating }}
+            </li>
+        {% endfor %}
+        </ul>
+    {% else %}
+        <p>Aucune review enregistrée.</p>
+    </div>    
+
+{% endif %}
+</div> 
 {% endblock %}

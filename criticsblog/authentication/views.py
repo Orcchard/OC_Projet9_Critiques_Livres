@@ -3,7 +3,7 @@ from django.contrib.auth import authenticate, login, logout
 from django.contrib import messages
 from django.conf import settings
 from django.shortcuts import render, redirect
-from litreview.models import Ticket
+from litreview.models import Ticket, Review
 from litreview.forms import CreateTicket
 
 from .forms import SignUpForm, LoginForm
@@ -52,7 +52,14 @@ def login_page(request):
 def home(request):
     # récupère tous les tickets
     tickets = Ticket.objects.all()
-    return render(request, "authentication/home.html", {'tickets': tickets})
+
+    # récupère toutes les reviews
+    reviews = Review.objects.all()
+
+    # envoie les deux au template
+    context = {'tickets': tickets, 'reviews': reviews}
+    return render(request, "authentication/home.html", context)
+
 
 
 def logout_user(request):

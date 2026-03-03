@@ -17,9 +17,10 @@ def newticket_page(request):
             ticket.user = request.user
             ticket.save()
             return redirect('home')  # remplacer par le nom de la vue cible
-        else:
-            form = forms.CreateTicket()
-        return render(request, 'litreview/newticket.html', {'ticket_form': form})
+    else:
+        form = forms.CreateTicket()
+    return render(request, 'litreview/newticket.html', {'ticket_form': form})
+
 
 @login_required
 def newreview_page(request):
