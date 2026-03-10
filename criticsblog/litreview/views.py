@@ -1,4 +1,5 @@
 from django.shortcuts import render
+from litreview.models import Ticket, Review
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect, get_object_or_404
 from . import forms, models
@@ -6,7 +7,7 @@ from . import forms, models
 
 @login_required
 def newticket_page(request):
-    """Vue pour créer un nouveau ticket. 
+    """Vue pour créer un nouveau ticket.
     Accessible uniquement aux utilisateurs connectés."""
 
     if request.method == 'POST':
@@ -54,3 +55,10 @@ def newreview_page(request):
         # affichage des formulaires (GET ou POST invalide)
     context = {'ticket_form': form_ticket, 'review_form': form_review}
     return render(request, 'litreview/newreview.html', context)
+
+
+@login_required
+def ticket_list_page(request):
+    # récupère tous les tickets
+    tickets = Ticket.objects.all()
+    return render(request, 'litreview/ticket_list.html', {'tickets': tickets})

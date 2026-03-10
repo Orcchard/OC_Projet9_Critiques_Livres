@@ -224,7 +224,17 @@ body {
 
 .tickets-section {
     margin-bottom: 30px;
-    /* espace sous les tickets */
+    text-align: center;
+}
+
+.tickets-section h2 {
+    margin-bottom: 20px;
+    /* espace entre le titre "Liste des tickets" et la liste */
+}
+
+.tickets-section ul li {
+    margin-bottom: 15px;
+    /* espace entre chaque ticket */
 }
 
 .reviews-section {

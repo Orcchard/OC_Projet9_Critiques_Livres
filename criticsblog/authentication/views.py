@@ -51,15 +51,7 @@ def login_page(request):
 @login_required
 def home(request):
     # récupère tous les tickets
-    tickets = Ticket.objects.all()
-
-    # récupère toutes les reviews
-    reviews = Review.objects.all()
-
-    # envoie les deux au template
-    context = {'tickets': tickets, 'reviews': reviews}
-    return render(request, "authentication/home.html", context)
-
+    return render(request, "authentication/home.html")
 
 
 def logout_user(request):

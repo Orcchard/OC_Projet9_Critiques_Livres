@@ -17,7 +17,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from authentication.views import signup_page, login_page, home, logout_user
-from litreview.views import newticket_page, newreview_page
+from litreview.views import newticket_page, newreview_page, ticket_list_page
 
 
 urlpatterns = [
@@ -28,5 +28,6 @@ urlpatterns = [
     path('logout/', logout_user, name='logout'),
     path('ticket/newticket/', newticket_page, name='newticket'),
     path('review/newreview/', newreview_page, name='newreview'),
+    path('ticket/ticket-list/', ticket_list_page, name='ticketlist')
     
 ]

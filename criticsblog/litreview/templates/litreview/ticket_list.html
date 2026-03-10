@@ -1,0 +1,21 @@
+{% extends "base.html" %}
+
+{% block content %}
+
+    <div class="tickets-section">
+    <h2>Liste des tickets</h2>
+
+    {% if tickets %}
+        <ul>
+            {% for ticket in tickets %}
+                <li><strong>{{ ticket.title }}</strong><br>
+                    Créé par : {{ ticket.user.username }}<br>
+                    Date : {{ ticket.time_created|date:"d/m/Y H:i" }} </li>              
+            {% endfor %}
+        </ul>
+    {% else %}
+        <p>Aucun ticket enregistré.</p>
+    {% endif %}
+    </div> 
+    {% endblock %}
+
