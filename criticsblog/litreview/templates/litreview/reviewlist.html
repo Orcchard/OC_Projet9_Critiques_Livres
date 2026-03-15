@@ -1,0 +1,40 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<div class="ticket-container">
+<h1>Liste des  critiques</h1>
+
+{% if tickets %}
+    {% for ticket in tickets %}
+        <div class="ticket-card">
+            <h2>{{ ticket.title }}</h2>
+            <p><strong>Créé par :</strong> {{ ticket.user.username }}</p>
+            {% if ticket.image %}
+                <img src="{{ ticket.image.url }}" alt="Image du ticket" style="width:200px; height:auto;">
+            {% endif %}
+            <p><strong>Date :</strong> {{ ticket.time_created|date:"d/m/Y H:i" }}</p>
+
+            <h3>Critiques :</h3>
+            {% if ticket.review_set.all %}
+                {% for review in ticket.review_set.all %}
+                    <div class="review-card">
+                        <strong>{{ review.headline }}</strong> 
+                        - Note : {{ review.rating }}/5<br>
+                        <p> {{ review.body }}</p>
+                        <em>
+                        Par {{ review.user.username }} 
+                        le {{ review.time_created|date:"d/m/Y H:i" }}
+                        </em>
+                    </div>            
+                {% endfor %}
+            {% else %}
+                <p>Aucune critique pour ce ticket.</p>
+            {% endif %}
+        </div>
+    {% endfor %}
+{% else %}
+    <p>Aucun ticket disponible.</p>
+{% endif %}
+</div>
+{% endblock %}
+

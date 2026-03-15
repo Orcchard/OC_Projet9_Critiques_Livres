@@ -14,14 +14,51 @@ body {
 /* ===== HEADER (commun aux deux pages) ===== */
 .header {
     width: 100%;
+    position: relative;
+    /* nécessaire pour les boutons en absolute */
     text-align: center;
-    font-size: 22px;
+    font-size: 18px;
     font-weight: bold;
     padding: 15px 0;
     border-bottom: 2px solid #ccc;
     background-color: white;
     margin-bottom: 20px;
 }
+
+/* ===== BOUTONS DU HEADER ===== */
+.action-main-buttons {
+    position: absolute;
+    top: 50%;
+    /* centre verticalement par rapport au header */
+    right: 20px;
+    /* marge à droite */
+    transform: translateY(-50%);
+    /* remonte les bouton dans moitié du header en hauteur */
+}
+
+.header-btn {
+    display: inline-block;
+    /* permet padding et width */
+    padding: 8px 16px;
+    /* boutons réduits */
+    font-size: 12px;
+    /* texte plus petit */
+    font-weight: bold;
+    border-radius: 15px;
+    /* arrondi */
+    background-color: #e0e0e0;
+    color: black;
+    text-decoration: none;
+    transition: background-color 0.3s;
+    margin-left: 6px;
+    /* espace entre boutons */
+}
+
+.header-btn:hover {
+    background-color: #1694c9;
+    /* hover foncé */
+}
+
 
 /* ===== STYLES DES BOUTONS (communs) ===== */
 .btn {
@@ -304,14 +341,54 @@ body {
         width: 90%;
         min-height: auto;
     }
+}
 
-    .left-section,
-    .right-section {
-        padding: 30px 20px;
-    }
+.left-section,
+.right-section {
+    padding: 30px 20px;
+}
 
-    .container {
-        width: 90%;
-        padding: 20px;
-    }
+.container {
+    width: 90%;
+    padding: 20px;
+}
+
+
+.ticket-container {
+    width: 80%;
+    margin: auto;
+}
+
+.ticket-card {
+    border: 2px solid #333;
+    padding: 20px;
+    margin-bottom: 30px;
+    border-radius: 8px;
+}
+
+.ticket-image {
+    width: 200px;
+    height: auto;
+    margin-bottom: 10px;
+}
+
+.review-card {
+    border: 1px solid #999;
+    padding: 15px;
+    margin-top: 15px;
+    border-radius: 8px;
+    background-color: #f9f9f9;
+}
+
+/* ===== BOUTONS DU HEADER ===== */
+.action-main-buttons {
+    margin-left: 6px;
+    /* espace entre boutons */
+    border-radius: 15px;
+    background-color: #e3e9e3;
+    color: white;
+    padding: 2px 4px;
+    text-decoration: none;
+    font-weight: bold;
+    font-size: 10px;
 }

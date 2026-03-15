@@ -1,0 +1,54 @@
+<!DOCTYPE html>
+<html>
+<head>
+    <title>Détails du ticket</title>
+    <style>
+        .ticket-container {
+            max-width: 600px;
+            margin: 20px auto;
+            font-family: Arial, sans-serif;
+        }
+        .ticket-image {
+            width: 100%;
+            height: auto;
+            margin-bottom: 20px;
+            border: 1px solid #ddd;
+        }
+        .ticket-field {
+            margin-bottom: 10px;
+        }
+        .ticket-label {
+            font-weight: bold;
+        }
+    </style>
+</head>
+<body>
+    <div class="ticket-container">
+
+        {% if ticket.image %}
+            <img src="{{ ticket.image.url }}" alt="Couverture de {{ ticket.title }}" class="ticket-image">
+        {% else %}
+            <p><em>Aucune couverture disponible.</em></p>
+        {% endif %}
+
+        <div class="ticket-field">
+            <span class="ticket-label">Titre :</span>
+            {{ ticket.title|default:"Non renseigné" }}
+        </div>
+
+        <div class="ticket-field">
+            <span class="ticket-label">Description :</span>
+            {{ ticket.description|default:"Non renseigné" }}
+        </div>
+
+        <!-- Ajoute ici d'autres champs si ton modèle en a -->
+        <!-- Exemple : 
+        <div class="ticket-field">
+            <span class="ticket-label">Auteur :</span>
+            {{ ticket.author|default:"Non renseigné" }}
+        </div>
+        -->
+
+    </div>
+</body>
+</html>

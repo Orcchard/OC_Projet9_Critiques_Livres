@@ -20,7 +20,10 @@ class CreateTicket(forms.ModelForm):
 
 class CreateReview(forms.ModelForm):
     headline = forms.CharField(label="Titre", required=True)
-    body = forms.CharField(label="Commentaire", max_length=8192, widget=forms.Textarea, required=True)
+    body = forms.CharField(
+        label="Commentaire", max_length=8192, widget=forms.Textarea,
+        required=True
+        )
     rating = forms.ChoiceField(
         initial=3,
         label="Notez ce livre",

@@ -1,4 +1,4 @@
-from django.shortcuts import render
+from django.shortcuts import render, get_object_or_404
 from litreview.models import Ticket, Review
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect, get_object_or_404
@@ -17,7 +17,7 @@ def newticket_page(request):
             ticket = form.save(commit=False)
             ticket.user = request.user
             ticket.save()
-            return redirect('home')  # remplacer par le nom de la vue cible
+            return redirect('home')  # redirige vers URL après création d'objet en database
     else:
         form = forms.CreateTicket()
     return render(request, 'litreview/newticket.html', {'ticket_form': form})
@@ -25,7 +25,7 @@ def newticket_page(request):
 
 @login_required
 def newreview_page(request):
-    """Vue pour créer une nouvelle critique. 
+    """Vue pour créer une nouvelle critique.
     Accessible uniquement aux utilisateurs connectés."""
 
     if request.method == 'POST':
@@ -62,3 +62,22 @@ def ticket_list_page(request):
     # récupère tous les tickets
     tickets = Ticket.objects.all()
     return render(request, 'litreview/ticket_list.html', {'tickets': tickets})
+
+
+@login_required
+def review_list_page(request):
+    tickets = Ticket.objects.prefetch_related(
+        'review_set'
+        ).all().order_by('-time_created')
+    context = {
+        'tickets': tickets
+    }
+    return render(request, 'litreview/reviewlist.html', context)
+
+
+@login_required
+def edit_ticket(request, ticket_id):
+    ticket = get_object_or_404(models.Ticket, id=ticket_id)
+    return render(
+        request, 'tickets/ticket_detail.html', {'ticket': ticket}
+        )

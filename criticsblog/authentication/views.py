@@ -5,6 +5,7 @@ from django.conf import settings
 from django.shortcuts import render, redirect
 from litreview.models import Ticket, Review
 from litreview.forms import CreateTicket
+from django import forms
 
 from .forms import SignUpForm, LoginForm
 
@@ -34,18 +35,22 @@ def login_page(request):
             user = authenticate(request, username=username, password=password)
             if user is not None:
                 login(request, user)
-                # return redirect("home")  # ou "accueil" selon votre URL
-                next_url = request.GET.get('next', 'home')
-                return redirect(next_url)
+                return redirect("home")  # ou "accueil" selon votre URL
             else:
                 # Identifiants incorrects
-                messages.error(request, "Nom d'utilisateur ou mot de passe incorrect")
+                messages.error(
+                    request, "Nom d'utilisateur ou mot de passe incorrect"
+                    )
         else:  # Formulaire invalide (champs manquants, etc.)
-            messages.error(request, "Veuillez remplir correctement tous les champs")
+            messages.error(
+                request, "Veuillez remplir correctement tous les champs"
+                )
 
     else:
         form = LoginForm()
-    return render(request, "authentication/login.html", {"form": form})
+    return render(
+        request, "authentication/login.html", {"form": form}
+        )
 
 
 @login_required
