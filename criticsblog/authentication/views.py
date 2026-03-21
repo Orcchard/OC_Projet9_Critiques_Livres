@@ -4,6 +4,7 @@ from django.contrib import messages
 from django.conf import settings
 from django.shortcuts import render, redirect
 from litreview.models import Ticket, Review
+from .models import User, UserFollow
 from litreview.forms import CreateTicket
 from django import forms
 
@@ -60,13 +61,43 @@ def home(request):
 
 
 def logout_user(request):
+    """Missing"""
     logout(request)
     return redirect("login")
 
 
 def followers_list(request):
+    """Missing"""
     followers_relations = request.user.followed_by.all()
     followers = [relation.user for relation in followers_relations]
     return render(request, 'followers_list.html', {
         'followers': followers
     })
+
+
+def suscribe_page(request):
+    """Missing"""
+    # Tous les utilisateurs sauf soi-même pour l'interface, un user ne peux s'appeler
+    users = User.objects.exclude(id=request.user.id)
+
+    # Utilisateurs que je suis
+    # on récupère des utilisateurs (User) à partir de la base de données.
+    following = User.objects.filter(followed_by__user=request.user)
+
+    # Utilisateurs qui me suivent
+    followers = User.objects.filter(following__followed_user=request.user)
+    # followed_by → Related_name que défini dans ton modèle UserFollow :
+
+    return render(request, 'abonnements.html', {
+        'users': users,
+        'following': following,
+        'followers': followers,
+    })
+
+
+def follow_user_page(request, id):
+    """Missing"""
+
+
+def unfollow_user_page(request, id):
+    """Missing"""

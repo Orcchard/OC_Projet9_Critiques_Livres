@@ -21,3 +21,4 @@ class UserFollow(models.Model):
 
     class Meta:
         unique_together = ('user', 'followed_user')
+        # Instruction Django qui impose une relation qui n'existe qu'une seule fois

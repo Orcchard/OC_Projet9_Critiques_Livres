@@ -1,0 +1,29 @@
+<h1>Abonnements</h1>
+
+<h2>Tous les utilisateurs</h2>
+{% for user in users %}
+    <p>
+        {{ user.username }}
+        {% if user in following %}
+            <a href="{% url 'unfollow_user' user.id %}" class="btn">Se désabonner</a>
+        {% else %}
+            <a href="{% url 'follow_user' user.id %}" class="btn">S'abonner</a>
+        {% endif %}
+    </p>
+{% endfor %}
+
+<hr>
+
+<h2>Mes abonnements</h2>
+{% for user in following %}
+    <p>{{ user.username }}</p>
+{% empty %}
+    <p>Vous ne suivez encore personne.</p>
+{% endfor %}
+
+<h2>Mes abonnés</h2>
+{% for user in followers %}
+    <p>{{ user.username }}</p>
+{% empty %}
+    <p>Vous n'avez pas encore d'abonnés.</p>
+{% endfor %}
