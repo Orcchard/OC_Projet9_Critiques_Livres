@@ -3,8 +3,17 @@
 {% block content %}
 <div class="container">
     <p> Bonjour:  {{ user.username }} </p>
-    <!-- Liens utiles -->
-    
-</div>    
-
+    <p class="subtitle">Liste des abonnés</p>
+    {% if followers %}
+            <ul class="followers-list">
+                {% for follower in followers %}
+                    <li class="follower-item">
+                        {{ follower.username }}
+                    </li>
+                {% endfor %}
+            </ul>
+        {% else %}
+            <p>Aucun abonné pour le moment.</p>
+    {% endif %}
+</div>
 {% endblock %}

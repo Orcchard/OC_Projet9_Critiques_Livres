@@ -12,11 +12,11 @@ class Ticket(models.Model):
         to=settings.AUTH_USER_MODEL, on_delete=models.CASCADE)
     # Champ image avec chemin d'accès organisé
     image = models.ImageField(
-        upload_to='ticket_images/',  # sous-dossier MEDIA_ROOT
+        upload_to='ticket_images/',  # Tous les fichiers seront stockés dans.
+        # sous-dossier MEDIA_ROOT
         null=True,
         blank=True
     )
-    image = models.ImageField(null=True, blank=True)
     time_created = models.DateTimeField(default=timezone.now)
 
     def __str__(self):

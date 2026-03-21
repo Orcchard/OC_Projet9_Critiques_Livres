@@ -62,3 +62,11 @@ def home(request):
 def logout_user(request):
     logout(request)
     return redirect("login")
+
+
+def followers_list(request):
+    followers_relations = request.user.followed_by.all()
+    followers = [relation.user for relation in followers_relations]
+    return render(request, 'followers_list.html', {
+        'followers': followers
+    })

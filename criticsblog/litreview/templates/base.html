@@ -12,9 +12,14 @@
     <header class="header">
         LITReview
         <div class="action-main-buttons">
-            <a href="{% url 'logout' %}" class="header-btn">Se déconnecter</a>
+            <!-- Formulaire POST pour logout -->
+            <form method="post" action="{% url 'logout' %}" style="display:inline;">
+            {% csrf_token %}
+            <button type="submit" classs="header-btn">Se déconnecter</button>
+                {% csrf_token %}
+            </form>
+            <a href="{% url 'ticketreview' %}" class="header-btn">Afficher une review</a>
             <a href="{% url 'newticket' %}" class="header-btn">Créer un ticket</a>
-            <a href="{% url 'newreview' %}" class="header-btn">Créer une review</a>
             <a href="{% url 'ticketlist' %}" class="header-btn"> Liste des tickets</a>
             <a href="{% url 'reviewlist' %}" class="header-btn">Liste des reviews</a>
         </div>

@@ -2,18 +2,33 @@
 {% block content %}
     
 <div class="container">
-    <p class="create_text">Créer une critique</p>
+    <!-- Affichage du ticket existant -->
+    <div class="ticket-item">
+        {% if ticket.image %}
+            <img src="{{ ticket.image.url }}" alt="Couverture de {{ ticket.title }}" style="width:200px; height:auto;">
+        {% else %}
+            <p><em>Aucune couverture disponible.</em></p>
+        {% endif %}
 
-    <form method="post" enctype="multipart/form-data" novalidate>
-        {% csrf_token %}
+        <p><strong>Titre :</strong> {{ ticket.title }}</p>
+        <p><strong>Description :</strong> {{ ticket.description }}</p>
+        <p><strong>Abonné :</strong> {{ ticket.user }}</p>
+    </div>
+
+    <hr>
+    <!-- Formulaire review -->
         <!-- champs générés par Django -->
-        {{ ticket_form.as_p }}
-        {{ review_form.as_p }}
+    <div class="review-form">
+        <p class="create_text">Ajouter une critique</p>
+        <form method="post" enctype="multipart/form-data" novalidate>
+            {% csrf_token %}
+            {{ review_form.as_p }}
         
-        <!-- bouton Envoyer aligné à droite -->
-        <div class="action-buttons">            
-        <input type="submit" value="Envoyer la review" class="btn">
-        </div>
-    </form>
+            <!-- bouton Envoyer aligné à droite -->
+            <div class="action-buttons">            
+                <input type="submit" value="Envoyer la critique" class="btn">
+            </div>
+        </form>
+    </div>
 </div>
 {% endblock %}

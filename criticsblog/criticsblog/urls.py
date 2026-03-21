@@ -17,7 +17,9 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from authentication.views import signup_page, login_page, home, logout_user
-from litreview.views import newticket_page, newreview_page, ticket_list_page, review_list_page
+from litreview.views import newticket_page, newreview_page
+from litreview.views import ticket_list_page, review_list_page
+from litreview.views import create_ticket_and_review_page
 from django.conf import settings
 from django.conf.urls.static import static
 
@@ -28,8 +30,10 @@ urlpatterns = [
     path("login/", login_page, name="login"),
     path('', home, name='home'),
     path('logout/', logout_user, name='logout'),
+    path('ticket/newticket/<int:ticket_id>', newticket_page, name='newticket'),
     path('ticket/newticket/', newticket_page, name='newticket'),
-    path('review/newreview/', newreview_page, name='newreview'),
+    path('review/newreview/<int:ticket_id>', newreview_page, name='newreview'),
+    path('review/ticketreview/', create_ticket_and_review_page, name='ticketreview'),
     path('ticket/ticketlist/', ticket_list_page, name='ticketlist'),
     path('review/reviewlist/', review_list_page, name='reviewlist'),
 ]
