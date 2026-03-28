@@ -1,0 +1,49 @@
+{% extends 'base.html' %}
+
+{% block content %}
+<h2>Supprimer le ticket : "{{ ticket.title }}" ?</h2>
+
+<div class="ticket-card">
+    <div class="ticket-header">
+        {% if ticket.image %}
+            <div class="ticket-image">
+                <img src="{{ ticket.image.url }}" alt="Image du ticket" style="max-width:300px;">
+            </div>
+        {% endif %}
+
+        <div class="ticket-info">
+            <h3>{{ ticket.title }}</h3>
+            <p><strong>Créé par :</strong> {{ ticket.user.username }}</p>
+            <p class="ticket-description"><strong>Description :</strong> {{ ticket.description }}</p>
+            <p><strong>Date :</strong> {{ ticket.time_created|date:"d/m/Y H:i" }}</p>
+        </div>
+    </div>
+
+    <!-- Reviews du ticket -->
+    <h3>Critiques :</h3>
+    {% if ticket.review_set.all %}
+        {% for review in ticket.review_set.all %}
+            <div class="review-card">
+                <strong>{{ review.headline }}</strong> - Note : {{ review.rating }}/5<br>
+                <p>{{ review.body }}</p>
+                <em>
+                    Par {{ review.user.username }} 
+                    le {{ review.time_created|date:"d/m/Y H:i" }}
+                </em>
+            </div>
+        
+    {% empty %}
+        <p class="no-review">Aucune critique pour ce ticket.</p>
+        {% endfor %}
+    {% endif %}
+</div>
+
+{% endblock %} {# <-- Fin du bloc TICKET #}
+
+
+<!-- Formulaire de confirmation -->
+<form method="post" style="margin-top:20px;">
+    {% csrf_token %}
+    <button type="submit" class="btn btn-delete">Confirmer la suppression du ticket</button>
+    <a href="{% url 'feed' %}" class="btn btn-cancel">Annuler la suppression du ticket</a>
+</form>

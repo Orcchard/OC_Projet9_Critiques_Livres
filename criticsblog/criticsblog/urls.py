@@ -17,12 +17,14 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from authentication.views import signup_page, login_page, home, logout_user
+from authentication.views import suscribe_page, follow_user_page, unfollow_user_page
 from litreview.views import newticket_page, newreview_page
 from litreview.views import ticket_list_page, review_list_page
 from litreview.views import create_ticket_and_review_page
-from litreview.views import follow_user_page, suscribe_page, unfollow_user_page
+from litreview.views import edit_ticket, delete_ticket, edit_review, delete_review
 from django.conf import settings
 from django.conf.urls.static import static
+from litreview.views import feed
 
 
 urlpatterns = [
@@ -33,16 +35,27 @@ urlpatterns = [
     path('logout/', logout_user, name='logout'),
     # page principale abonnements
     path('suscribe/', suscribe_page, name='suscribe'),
+    path('follow_user/<int:user_id>/', follow_user_page, name='followuser'),
+    path('unfollow_user/<int:user_id>/', unfollow_user_page, name='unfollowuser'),
+    path('feed/', feed, name='feed'),
 
     # suivre / se désabonner
-    path('follow/<int:user_id>/', follow_user_page, name='follow_user'),
-    path('unfollow/<int:user_id>/', unfollow_user_page, name='unfollow_user'),
+    # path('follow/<int:user_id>/', follow_user_page, name='follow_user'),
+    # path('unfollow/<int:user_id>/', unfollow_user_page, name='unfollow_user'),
     path('ticket/newticket/<int:ticket_id>', newticket_page, name='newticket'),
     path('ticket/newticket/', newticket_page, name='newticket'),
     path('review/newreview/<int:ticket_id>', newreview_page, name='newreview'),
-    path('review/ticketreview/', create_ticket_and_review_page, name='ticketreview'),
+    path(
+        'review/ticketreview/',
+        create_ticket_and_review_page,
+        name='ticketreview'),
     path('ticket/ticketlist/', ticket_list_page, name='ticketlist'),
     path('review/reviewlist/', review_list_page, name='reviewlist'),
+    path('ticket/edit/<int:ticket_id>/', edit_ticket, name='edit_ticket'),
+    path('ticket/delete/<int:ticket_id>/', delete_ticket, name='delete_ticket'),
+
+    path('review/edit/<int:review_id>/', edit_review, name='edit_review'),
+    path('review/delete/<int:review_id>/', delete_review, name='delete_review'),
 ]
 if settings.DEBUG:
     urlpatterns += static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -11,18 +11,26 @@ body {
     min-height: 100vh;
 }
 
-/* ===== HEADER (commun aux deux pages) ===== */
+/* ===== HEADER (commun aux différentes pages) ===== */
 .header {
     width: 100%;
     position: relative;
     /* nécessaire pour les boutons en absolute */
     text-align: center;
-    font-size: 18px;
+    font-size: 12px;
     font-weight: bold;
-    padding: 15px 0;
+    padding: 5px 0;
     border-bottom: 2px solid #ccc;
     background-color: white;
     margin-bottom: 20px;
+}
+
+.header-left {
+    text-align: left;
+}
+
+.header-title {
+    margin-top: 30px;
 }
 
 /* ===== BOUTONS DU HEADER ===== */
@@ -32,7 +40,7 @@ body {
     /* centre verticalement par rapport au header */
     right: 20px;
     /* marge à droite */
-    transform: translateY(-50%);
+    transform: translateY(-90%);
     /* remonte les bouton dans moitié du header en hauteur */
 }
 

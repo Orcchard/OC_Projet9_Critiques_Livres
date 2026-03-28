@@ -4,6 +4,9 @@ from .forms import CreateTicket, CreateReview
 from django.contrib.auth.decorators import login_required
 from django.shortcuts import render, redirect, get_object_or_404
 from . import forms, models
+from itertools import chain
+from django.db.models import CharField, Value
+from authentication.models import UserFollow
 
 
 @login_required
@@ -72,7 +75,7 @@ def create_ticket_and_review_page(request):
         # GET → on crée des formulaires vides
         form_ticket = forms.CreateTicket()
         form_review = forms.CreateReview()
-    
+
     # Toujours renvoyer un HttpResponse pour GET ou POST invalide
     return render(
         request,
@@ -100,9 +103,104 @@ def review_list_page(request):
     return render(request, 'litreview/reviewlist.html', context)
 
 
+def feed(request):
+    # utilisateurs que je suis
+    followed_users = UserFollow.objects.filter(
+        user=request.user
+    ).values_list('followed_user', flat=True)
+
+    # inclure moi-même
+    users = list(followed_users) + [request.user.id]
+
+    # tickets (les miens + ceux que je suis)
+    tickets = Ticket.objects.filter(
+        user__in=users
+    )
+
+    # reviews (les miennes + celles que je suis)
+    reviews = Review.objects.filter(
+        user__in=users
+    )
+
+    # utilisateurs que je suis
+    followed_users = UserFollow.objects.filter(
+        user=request.user
+    ).values_list('followed_user', flat=True)
+
+    # inclure moi-même
+    users = list(followed_users) + [request.user.id]
+
+    # tickets (les miens + ceux que je suis)
+    tickets = Ticket.objects.filter(
+        user__in=users
+    )
+
+    # reviews (les miennes + celles que je suis)
+    reviews = Review.objects.filter(
+        user__in=users
+    )
+
+    # ajouter un champ pour différencier
+    tickets = tickets.annotate(content_type=Value('TICKET', CharField()))
+    reviews = reviews.annotate(content_type=Value('REVIEW', CharField()))
+    # crées un champ temporaire pour chaque objet 
+
+    # fusion + tri
+    posts = sorted(
+        chain(tickets, reviews),
+        key=lambda post: post.time_created,
+        reverse=True
+    )
+
+    return render(request, 'litreview/feed.html', {'posts': posts})
+
+
 @login_required
 def edit_ticket(request, ticket_id):
-    ticket = get_object_or_404(models.Ticket, id=ticket_id)
+    ticket = get_object_or_404(Ticket, id=ticket_id, user=request.user)
+
+    if request.method == 'POST':
+        form = CreateTicket(request.POST, request.FILES, instance=ticket)
+        if form.is_valid():
+            form.save()
+            return redirect('feed')
+    else:
+        form = CreateTicket(instance=ticket)
+
+    return render(request, 'litreview/edit_ticket.html', {'form': form})
+
+
+@login_required
+def delete_ticket(request, ticket_id):
+    ticket = get_object_or_404(Ticket, id=ticket_id, user=request.user)
+
+    if request.method == 'POST':
+        ticket.delete()
+        return redirect('feed')
+
     return render(
-        request, 'tickets/ticketdetail.html', {'ticket': ticket}
-        )
+        request, 'litreview/delete_ticket.html', {'ticket': ticket})
+
+
+@login_required
+def edit_review(request, review_id):
+    review = get_object_or_404(Review, id=review_id, user=request.user)
+
+    if request.method == 'POST':
+        form = CreateReview(request.POST, instance=review)
+        if form.is_valid():
+            form.save()
+            return redirect('feed')
+    else:
+        form = CreateReview(instance=review)
+
+    return render(request, 'litreview/edit_review.html', {'form': form})
+
+
+@login_required
+def delete_review(request, review_id):
+    review = get_object_or_404(Review, id=review_id, user=request.user)
+    if request.method == 'POST':
+        review.delete()
+        return redirect('feed')
+    return render(request, 'litreview/delete_review.html', {'review': review})

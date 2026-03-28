@@ -1,0 +1,85 @@
+{% extends "base.html" %}
+
+{% block content %}
+<div class="container">
+    <h1>Flux</h1>
+
+    {% for post in posts %}
+        {% if post.content_type == 'TICKET' %}
+            <!-- Ticket -->
+            <div class="ticket-card">
+                <div class="ticket-header">
+                    {% if post.image %}
+                        <div class="ticket-image">
+                            <img src="{{ post.image.url }}" alt="Image du ticket">
+                        </div>
+                    {% endif %}
+                    <div class="ticket-info">
+                        <h2>{{ post.title }}</h2>
+                        <p><strong>Créé par :</strong> {{ post.user.username }}</p>
+                        <p class="ticket-description"><strong>Description :</strong> {{ post.description }}</p>
+                        <p><strong>Date :</strong> {{ post.time_created|date:"d/m/Y H:i" }}</p>
+
+                        <!-- Actions Ticket -->
+                        {% if post.user == request.user %}
+                            <div class="ticket-actions">
+                                <a href="{% url 'edit_ticket' post.id %}" class="btn btn-edit">Modifier</a>
+                                <a href="{% url 'delete_ticket' post.id %}" class="btn btn-delete">Supprimer</a>
+                            </div>
+                        {% endif %}
+                    </div>
+                </div>
+
+                <!-- Reviews du Ticket -->
+                <h3>Critiques :</h3>
+                {% for review in post.review_set.all %}
+                    <div class="review-card">
+                        <strong>{{ review.headline }}</strong> - Note : {{ review.rating }}/5<br>
+                        <p>{{ review.body }}</p>
+                        <em>Par {{ review.user.username }} le {{ review.time_created|date:"d/m/Y H:i" }}</em>
+
+                        <!-- Actions Review -->
+                        {% if review.user == request.user %}
+                            <div class="review-actions">
+                                <a href="{% url 'edit_review' review.id %}" class="btn btn-edit">Modifier</a>
+                                <a href="{% url 'delete_review' review.id %}" class="btn btn-delete">Supprimer</a>
+                            </div>
+                        {% endif %}
+                    </div>
+                {% empty %}
+                    <p class="no-review">Aucune critique pour ce ticket.</p>
+                {% endfor %}
+            
+            <!-- BOUTON AJOUTER UNE REVIEW (uniquement pour créateur ou utilisateurs suivis) -->
+            {% if post.user == request.user or request.user in post.user.following.all %}
+            <p>
+            <a href="{% url 'newreview' post.id %}" class="btn">Ajouter une review</a>
+            </p>
+    {% endif %}
+            
+                
+
+        {% elif post.content_type == 'REVIEW' %}
+            <!-- Review indépendante -->
+            <div class="review-card">
+                <p>Ticket : {{ post.ticket.title }}</p>
+                <strong>{{ post.headline }}</strong> - Note : {{ post.rating }}/5<br>
+                <p>{{ post.body }}</p>
+                <em>Par {{ post.user.username }} le {{ post.time_created|date:"d/m/Y H:i" }}</em>
+
+                {% if post.user == request.user %}
+                    <div class="review-actions">
+                        <a href="{% url 'edit_review' post.id %}" class="btn btn-edit">Modifier</a>
+                        <a href="{% url 'delete_review' post.id %}" class="btn btn-delete">Supprimer</a>
+                    </div>
+                {% endif %}
+            </div>
+        {% endif %}
+    {% empty %}
+        <p>Aucun ticket disponible.</p>
+    {% endfor %}
+</div>
+
+{% endblock %}
+
+    

@@ -1,14 +1,18 @@
 from django.contrib.auth.decorators import login_required
 from django.contrib.auth import authenticate, login, logout
+from django.contrib.auth import get_user_model
 from django.contrib import messages
 from django.conf import settings
-from django.shortcuts import render, redirect
+from django.shortcuts import render, redirect, get_object_or_404
 from litreview.models import Ticket, Review
-from .models import User, UserFollow
+from .models import UserFollow, User
 from litreview.forms import CreateTicket
 from django import forms
 
 from .forms import SignUpForm, LoginForm
+
+
+# User = get_user_model()
 
 
 def signup_page(request):
@@ -88,16 +92,49 @@ def suscribe_page(request):
     followers = User.objects.filter(following__followed_user=request.user)
     # followed_by → Related_name que défini dans ton modèle UserFollow :
 
-    return render(request, 'abonnements.html', {
+    return render(request, "authentication/suscribe.html", {
         'users': users,
         'following': following,
         'followers': followers,
     })
 
 
-def follow_user_page(request, id):
-    """Missing"""
+@login_required
+def follow_user_page(request, user_id):
+    """But : récupérer l’utilisateur que l’on veut suivre (other_user)
+    Si l’utilisateur n’existe pas → renvoie automatiquement 404,
+    donc la vue ne plante pas"""
+    # utilisateur à suivre
+    # pylint: disable=E1101
+    other_user = get_object_or_404(User, id=user_id)
+    # éviter de se suivre soi-même
+    if other_user != request.user:
+        # créer la relation si elle n'existe pas encore
+        UserFollow.objects.get_or_create(
+            user=request.user,
+            followed_user=other_user
+        )
+        return redirect('suscribe')
 
 
-def unfollow_user_page(request, id):
-    """Missing"""
+@login_required
+def unfollow_user_page(request, user_id):
+    """
+    But : permettre à l'utilisateur connecté de ne plus suivre 'other_user'.
+    - Vérifie que 'other_user' existe.
+    - Empêche de se désuivre soi-même.
+    - Supprime la relation si elle existe.
+    """
+    other_user = get_object_or_404(User, id=user_id)
+
+    # impossible de se désuivre soi-même
+    if other_user != request.user:
+        # supprimer la relation si elle existe
+        # pylint: disable=E1101
+        UserFollow.objects.filter(
+            user=request.user,
+            followed_user=other_user
+        ).delete()
+
+    # retour à la page précédente ou accueil
+    return redirect('suscribe')
