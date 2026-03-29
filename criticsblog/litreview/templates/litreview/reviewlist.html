@@ -15,8 +15,8 @@
                 {% endif %}    
 
                 <div class="ticket-info">
-                    <h2>{{ ticket.title }}</h2>
-                    <p><strong>Créé par :</strong> {{ ticket.user.username }}</p>
+                    <h2>Titre: {{ ticket.title }}</h2>
+                    <p><strong>Ticket Créé par :</strong> {{ ticket.user.username }}</p>
                     <p class="ticket-description"><strong>Description :</strong> {{ ticket.description }}</p>
                     <p><strong>Date :</strong> {{ ticket.time_created|date:"d/m/Y H:i" }}</p>
                 </div>
@@ -30,11 +30,11 @@
         <!--utilisé dans Django templates pour vérifier si un ticket a des reviews associées-->
             {% for review in ticket.review_set.all %}
                 <div class="review-card">
-                    <strong>{{ review.headline }}</strong> 
+                    <strong>Titre: {{ review.headline }}</strong> 
                     - Note : {{ review.rating }}/5<br>
-                    <p> {{ review.body }}</p>
+                    <p>Commentaire: {{ review.body }}</p>
                     <em>
-                    Par {{ review.user.username }} 
+                    Review Par {{ review.user.username }} 
                     le {{ review.time_created|date:"d/m/Y H:i" }}
                         </em>
                 </div>            

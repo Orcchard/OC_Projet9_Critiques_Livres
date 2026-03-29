@@ -1,10 +1,35 @@
+{% block content %}
 <h2>Supprimer la review ?</h2>
 
-<p>{{ review.headline }}</p>
+<div class="ticket-card">
+    <h3>Ticket associé : {{ review.ticket.title }}</h3>
 
-<form method="post">
+    {% if review.ticket.image %}
+        <div class="ticket-image">
+            <img src="{{ review.ticket.image.url }}" alt="Image du ticket" style="max-width:300px;">
+        </div>
+    {% endif %}
+
+    <div class="ticket-info">
+        <p><strong>Créé par :</strong> {{ review.ticket.user.username }}</p>
+        <p><strong>Date création ticket :</strong> {{ review.ticket.time_created|date:"d/m/Y H:i" }}</p>
+        <p class="ticket-description">{{ review.ticket.description }}</p>
+    </div>
+</div>
+
+<hr>
+
+<!-- Infos de la review -->
+<p><strong>Titre review :</strong> {{ review.headline }}</p>
+<p><strong>Créée par :</strong> {{ review.user.username }}</p>
+<p><strong>Date :</strong> {{ review.time_created|date:"d/m/Y H:i" }}</p>
+<p>{{ review.body }}</p>
+
+<!-- Formulaire de confirmation -->
+<form method="post" style="margin-top:20px;">
     {% csrf_token %}
-    <button type="submit">Confirmer la suppression de la review</button>
+    <button type="submit" class="btn btn-delete">Confirmer la suppression de la review</button>
+    <a href="{% url 'feed' %}" class="btn btn-cancel">Annuler</a>
 </form>
 
-<a href="{% url 'feed' %}">Annuler la suppression de la review</a>
+{% endblock %}

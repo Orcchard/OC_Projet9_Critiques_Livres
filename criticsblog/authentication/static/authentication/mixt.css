@@ -419,3 +419,79 @@ body {
     align-items: flex-start;
     gap: 20px;
 }
+
+.btn-following {
+    padding: 12px 30px;
+    background-color: #e0e0e0;
+    color: #333;
+    border: 1px solid #ccc;
+    border-radius: 4px;
+    font-size: 16px;
+    font-weight: bold;
+    text-align: center;
+    text-decoration: none;
+    display: inline-block;
+    cursor: pointer;
+    transition: all 0.3s;
+}
+
+.user-table th,
+.user-table td {
+    padding: 10px;
+    border-bottom: 1px solid #ddd;
+    text-align: left;
+}
+
+.user-table th {
+    background-color: #f5f5f5;
+}
+
+.btn-following {
+    padding: 5px 10px;
+    background-color: #007bff;
+    color: white;
+    text-decoration: none;
+    border-radius: 4px;
+}
+
+.btn-following:hover {
+    background-color: #0056b3;
+}
+
+
+.user-list {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+}
+
+.user-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 3px;
+    border-bottom: 1px solid #ddd;
+}
+
+.btn-following {
+    padding: 5px 10px;
+    background-color: #007bff;
+    color: white;
+    text-decoration: none;
+    border-radius: 4px;
+}
+
+.btn-following:hover {
+    background-color: #0056b3;
+}
+
+hr {
+    border: none;
+    /* retire la bordure par défaut */
+    height: 4px;
+    /* épaisseur */
+    background-color: #333;
+    /* couleur de la ligne */
+    margin: 20px 0;
+    /* espace au-dessus et en dessous */
+}

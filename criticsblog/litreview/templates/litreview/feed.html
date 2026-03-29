@@ -34,9 +34,9 @@
                 <h3>Critiques :</h3>
                 {% for review in post.review_set.all %}
                     <div class="review-card">
-                        <strong>{{ review.headline }}</strong> - Note : {{ review.rating }}/5<br>
-                        <p>{{ review.body }}</p>
-                        <em>Par {{ review.user.username }} le {{ review.time_created|date:"d/m/Y H:i" }}</em>
+                        <strong>Titre:  {{ review.headline }}</strong> - Note : {{ review.rating }}/5<br>
+                        <p>Commentaire: {{ review.body }}</p>
+                        <em>Review Par {{ review.user.username }} le {{ review.time_created|date:"d/m/Y H:i" }}</em>
 
                         <!-- Actions Review -->
                         {% if review.user == request.user %}
@@ -46,26 +46,26 @@
                             </div>
                         {% endif %}
                     </div>
+
                 {% empty %}
                     <p class="no-review">Aucune critique pour ce ticket.</p>
                 {% endfor %}
             
             <!-- BOUTON AJOUTER UNE REVIEW (uniquement pour créateur ou utilisateurs suivis) -->
-            {% if post.user == request.user or request.user in post.user.following.all %}
+            {% if post.user.id == request.user.id or post.user.id in following_ids %}
             <p>
             <a href="{% url 'newreview' post.id %}" class="btn">Ajouter une review</a>
             </p>
-    {% endif %}
-            
-                
+        {% endif %}
+    </div>
 
         {% elif post.content_type == 'REVIEW' %}
             <!-- Review indépendante -->
             <div class="review-card">
-                <p>Ticket : {{ post.ticket.title }}</p>
-                <strong>{{ post.headline }}</strong> - Note : {{ post.rating }}/5<br>
-                <p>{{ post.body }}</p>
-                <em>Par {{ post.user.username }} le {{ post.time_created|date:"d/m/Y H:i" }}</em>
+                <p>Ticket: {{ post.ticket.title }}</p>
+                <strong> {{ post.headline }}</strong> - Note : {{ post.rating }}/5<br>
+                <p> Commentaire: {{ post.body }}</p>
+                <em>Review Par {{ post.user.username }} le {{ post.time_created|date:"d/m/Y H:i" }}</em>
 
                 {% if post.user == request.user %}
                     <div class="review-actions">

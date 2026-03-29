@@ -1,33 +1,49 @@
 {% extends "base.html" %}
 
 {% block content %}
+<div class="container subscriptions">
+    <h1>Souscription</h1>
+    <hr>
 
-<h1>Souscription</h1>
-<h2>Tous mes utilisateurs</h2>
-{% for user in users %}
-    <p>
-        {{ user.username }}
-        {% if user in following %}
-            <a href="{% url 'unfollowuser' user.id %}" class="btn">Se désabonner</a>
-        {% else %}
-            <a href="{% url 'followuser' user.id %}" class="btn">S'abonner</a>
-        {% endif %}
-    </p>
-{% endfor %}
+    <!-- Tous les adhérents -->
+    <h2>Tous les adhérents</h2>
+    <div class="user-list">
+        {% for user in users %}
+        <div class="user-item">
+            <span class="username">{{ user.username }}</span>
+            {% if user in following %}
+                <a href="{% url 'unfollowuser' user.id %}" class="btn-following">Se désabonner</a>
+            {% else %}
+                <a href="{% url 'followuser' user.id %}" class="btn-following">S'abonner</a>
+            {% endif %}
+        </div>
+        {% endfor %}
+    </div>
 
-<hr>
+    <hr>
 
-<h2>Mes abonnements</h2>
-{% for user in following %}
-    <p>{{ user.username }}</p>
-{% empty %}
-    <p>Vous ne suivez encore personne.</p>
-{% endfor %}
+    <!-- Les utilisateurs que je suis -->
+    <h2>Les utilisateurs que je suis</h2>
+    <div class="user-list">
+        {% for user in following %}
+        <div class="user-item">
+            <span class="username">{{ user.username }}</span>
+        </div>
+        {% empty %}
+        <p>Vous ne suivez encore personne.</p>
+        {% endfor %}
+    </div>
 
-<h2>Mes abonnés</h2>
-{% for user in followers %}
-    <p>{{ user.username }}</p>
-{% empty %}
-    <p>Vous n'avez pas encore d'abonnés.</p>
-{% endfor %}
+    <!-- Mes abonnés -->
+    <h2>Mes abonnés</h2>
+    <div class="user-list">
+        {% for user in followers %}
+        <div class="user-item">
+            <span class="username">{{ user.username }}</span>
+        </div>
+        {% empty %}
+        <p>Vous n'avez pas encore d'abonnés.</p>
+        {% endfor %}
+    </div>
+</div>
 {% endblock %}

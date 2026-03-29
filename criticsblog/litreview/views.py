@@ -104,55 +104,64 @@ def review_list_page(request):
 
 
 def feed(request):
-    # utilisateurs que je suis
-    followed_users = UserFollow.objects.filter(
-        user=request.user
-    ).values_list('followed_user', flat=True)
+    """Prépare et retourne le flux d'activité (feed) pour le user connecté.
 
-    # inclure moi-même
-    users = list(followed_users) + [request.user.id]
+    Le feed contient :
+    1. Tous les tickets créés par le user connecté et par les utilisateurs qu'il suit.
+    2. Toutes les reviews créées par le user connecté et par les utilisateurs qu'il suit.
+
+    Chaque objet est annoté d'un champ temporaire 'content_type' :
+        - 'TICKET' pour les tickets
+        - 'REVIEW' pour les reviews
+
+    Les objets sont ensuite fusionnés dans une seule liste et triés par date
+    de création décroissante (du plus récent au plus ancien).
+
+    Args:
+        request: HttpRequest de Django représentant le user connecté.
+
+    Returns:
+        render: Rend le template 'litreview/feed.html' avec le contexte {'posts': posts}."""
+    # IDs des utilisateurs suivis
+    following_ids = list(UserFollow.objects.filter(
+        user=request.user
+    ).values_list('followed_user', flat=True))
+
+    # On récupère tous les objets UserFollow
+    # où le champ user correspond au user connecté request.user
+    # values_list() : permet de récupérer un ou plusieurs champs précis des objets filtrés,
+    # plutôt que de récupérer tout l’objet complet.
+
+    # inclure le user lui-même
+    users_ids = following_ids + [request.user.id]  
+    # ajoute l’ID du user connecté à la liste
 
     # tickets (les miens + ceux que je suis)
     tickets = Ticket.objects.filter(
-        user__in=users
+        user__in=users_ids
     )
-
-    # reviews (les miennes + celles que je suis)
-    reviews = Review.objects.filter(
-        user__in=users
-    )
-
-    # utilisateurs que je suis
-    followed_users = UserFollow.objects.filter(
-        user=request.user
-    ).values_list('followed_user', flat=True)
-
-    # inclure moi-même
-    users = list(followed_users) + [request.user.id]
-
-    # tickets (les miens + ceux que je suis)
-    tickets = Ticket.objects.filter(
-        user__in=users
-    )
-
-    # reviews (les miennes + celles que je suis)
-    reviews = Review.objects.filter(
-        user__in=users
-    )
-
     # ajouter un champ pour différencier
     tickets = tickets.annotate(content_type=Value('TICKET', CharField()))
-    reviews = reviews.annotate(content_type=Value('REVIEW', CharField()))
-    # crées un champ temporaire pour chaque objet 
+    # user__in=users → filtre uniquement les tickets dont le champ user est dans la liste users
 
-    # fusion + tri
+    # reviews (les miennes + celles que je suis)
+    reviews = Review.objects.filter(user__in=users_ids)
+
+    reviews = reviews.annotate(content_type=Value('REVIEW', CharField()))
+    # crées un champ temporaire pour chaque objet
+
+    # fusion + tri date décroissante
     posts = sorted(
         chain(tickets, reviews),
         key=lambda post: post.time_created,
         reverse=True
     )
+    # chain:Permet de concaténer deux itérables (ici tickets et reviews)
+    # sans créer une nouvelle liste temporaire
 
-    return render(request, 'litreview/feed.html', {'posts': posts})
+    return render(
+        request, 'litreview/feed.html',
+        {'posts': posts, 'following_ids': following_ids, })  # pour le template
 
 
 @login_required
@@ -171,18 +180,6 @@ def edit_ticket(request, ticket_id):
 
 
 @login_required
-def delete_ticket(request, ticket_id):
-    ticket = get_object_or_404(Ticket, id=ticket_id, user=request.user)
-
-    if request.method == 'POST':
-        ticket.delete()
-        return redirect('feed')
-
-    return render(
-        request, 'litreview/delete_ticket.html', {'ticket': ticket})
-
-
-@login_required
 def edit_review(request, review_id):
     review = get_object_or_404(Review, id=review_id, user=request.user)
 
@@ -195,6 +192,19 @@ def edit_review(request, review_id):
         form = CreateReview(instance=review)
 
     return render(request, 'litreview/edit_review.html', {'form': form})
+
+
+@login_required
+def delete_ticket(request, ticket_id):
+    ticket = get_object_or_404(Ticket, id=ticket_id, user=request.user)
+
+    if request.method == 'POST':
+        ticket.delete()
+        return redirect('feed')
+
+    return render(
+        request, 'litreview/delete_ticket.html', {'ticket': ticket})
+
 
 
 @login_required

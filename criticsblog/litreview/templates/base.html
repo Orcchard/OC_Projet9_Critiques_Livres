@@ -26,13 +26,14 @@
             <!--<button type="submit" classs="header-btn">Se déconnecter</button>-->
                 {% csrf_token %}
             </form>
-            <a href="{% url 'ticketreview' %}" class="header-btn">Afficher une review</a>
+            <a href="{% url 'feed' %}" class="header-btn">flux</a>
+            <a href="{% url 'suscribe' %}" class="header-btn">Souscription</a>
+            <a href="{% url 'ticketreview' %}" class="header-btn">Créer une review</a>
             <a href="{% url 'newticket' %}" class="header-btn">Créer un ticket</a>
             <a href="{% url 'ticketlist' %}" class="header-btn"> Liste des tickets</a>
             <a href="{% url 'reviewlist' %}" class="header-btn">Liste des reviews</a>
-            <a href="{% url 'suscribe' %}" class="header-btn">Souscription</a>
             <a href="{% url 'login' %}" class="header-btn">Se deconnecter</a>
-            <a href="{% url 'feed' %}" class="header-btn">flux</a>
+            
         </div>
     </header>
         

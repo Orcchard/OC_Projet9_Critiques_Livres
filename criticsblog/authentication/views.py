@@ -8,6 +8,7 @@ from litreview.models import Ticket, Review
 from .models import UserFollow, User
 from litreview.forms import CreateTicket
 from django import forms
+from django.contrib.auth.models import User
 
 from .forms import SignUpForm, LoginForm
 
@@ -81,16 +82,26 @@ def followers_list(request):
 
 def suscribe_page(request):
     """Missing"""
-    # Tous les utilisateurs sauf soi-même pour l'interface, un user ne peux s'appeler
+    # Tous les utilisateurs sauf soi-même pour l'interface, 
+    # un user ne peux s'appeler
     users = User.objects.exclude(id=request.user.id)
-
     # Utilisateurs que je suis
-    # on récupère des utilisateurs (User) à partir de la base de données.
+    # on récupère des utilisateurs (User) à partir de la base de données
+    #  User.objects est un manager Django,Tu utilises
+    # ce manager pour interroger la base de données.
     following = User.objects.filter(followed_by__user=request.user)
+    # followed_by_user:syntaxe de Django ORM pour traverser une relation
+    # le double underscore __ clé pour comprendre Django ORM et la façon dont
+    # il traverse les relations.
+    # ForeignKey / related_name.
+    # Donne-moi tous les utilisateurs qui sont suivis par request.user
+    # l’utilisateur actuellement connecté qui consulte le feed.
 
     # Utilisateurs qui me suivent
     followers = User.objects.filter(following__followed_user=request.user)
-    # followed_by → Related_name que défini dans ton modèle UserFollow :
+    # following__followed_user: syntaxe de Django ORM pour traverser
+    # une relation ForeignKey / related_name.
+    # Donne-moi tous les utilisateurs qui me suivent
 
     return render(request, "authentication/suscribe.html", {
         'users': users,
