@@ -3,6 +3,12 @@ from django import forms
 from . import models
 
 
+MIN_RATING = 1
+MAX_RATING = 5
+DEFAULT_STARS = 3
+RATING_CHOICES = [(i, f"-{i}") for i in range(MIN_RATING, MAX_RATING + 1)]
+
+
 class CreateTicket(forms.ModelForm):
     """Missing"""
     title = forms.CharField(label="Titre du livre", max_length=128, required=True)
@@ -25,16 +31,11 @@ class CreateReview(forms.ModelForm):
         required=True
         )
     rating = forms.ChoiceField(
-        initial=3,
         label="Notez ce livre",
+        initial=DEFAULT_STARS,
+        choices=RATING_CHOICES,
         widget=forms.RadioSelect(attrs={'class': 'inline'}),
         required=True,
-        choices=(
-            (1, "-1"),
-            (2, "-2"),
-            (3, "-3"),
-            (4, "-4"),
-            (5, "-5"))
         )
 
     class Meta:

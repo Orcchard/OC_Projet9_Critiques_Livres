@@ -368,7 +368,7 @@ body {
 }
 
 .ticket-card {
-    border: 2px solid #333;
+    /*border: 2px solid #333;*/
     padding: 20px;
     margin-bottom: 30px;
     border-radius: 8px;
@@ -376,9 +376,20 @@ body {
 
 .ticket-image {
     width: 200px;
-    height: auto;
+    height: 250PX;
     margin-bottom: 10px;
 }
+
+.ticket-image img {
+    width: 200px;
+    height: 250px;
+    /* 👈 augmente ici */
+    object-fit: cover;
+    /* garde un bon cadrage */
+    border-radius: 8px;
+}
+
+
 
 .review-card {
     border: 1px solid #999;
@@ -399,6 +410,17 @@ body {
     /* fond blanc */
 }
 
+.review-header {
+    display: flex;
+    /* aligne étoiles et headline horizontalement */
+    align-items: center;
+    /* centre verticalement */
+    gap: 10px;
+    /* espace entre étoiles et titre */
+    margin-bottom: 8px;
+    /* petit espace en dessous pour séparer du reste */
+}
+
 /* Message "Aucune critique" en rouge */
 .no-review {
     color: red;
@@ -408,6 +430,20 @@ body {
 
 .ticket-info {
     flex: 1;
+    align-items: right;
+}
+
+.ticket-title {
+    font-weight: bold;
+    margin: 0 0 5px 0;
+}
+
+.ticket-meta {
+    text-align: right;
+    /* username/date à droite */
+    font-style: italic;
+    color: #666;
+    margin: 0 0 5px 0;
 }
 
 .ticket-description {
@@ -418,6 +454,49 @@ body {
     display: flex;
     align-items: flex-start;
     gap: 20px;
+}
+
+.rating {
+    color: gold;
+    /* étoiles dorées */
+    font-size: 1.2em;
+    /* légèrement plus grosses */
+}
+
+.review-headline {
+    margin-right: 10px;
+    /* espace avec la meta */
+}
+
+/* Le meta à droite */
+.review-meta {
+    color: #555;
+    float: right;
+    /* pousse à droite sur la même ligne */
+    font-style: italic;
+    color: #555;
+}
+
+.review-body {
+    margin-top: 10px;
+    font-size: 16px;
+    font-style: italic;
+    line-height: 1.4;
+    text-align: left;
+    /* aligne le texte à gauche */
+    font-weight: bold;
+    /* texte en gras */
+}
+
+.review-header {
+    display: flex;
+    /* aligne étoiles et headline horizontalement */
+    align-items: center;
+    /* centre verticalement */
+    gap: 10px;
+    /* espace entre étoiles et titre */
+    margin-bottom: 8px;
+    /* petit espace en dessous pour séparer du reste */
 }
 
 .btn-following {

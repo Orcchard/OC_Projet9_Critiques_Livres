@@ -33,13 +33,17 @@ def newreview_page(request, ticket_id):
     Si ticket_id est fourni, ajoute la review à un ticket existant.
     Sinon, crée un nouveau ticket + review."""
     ticket = get_object_or_404(Ticket, id=ticket_id)
-    form_review = forms.CreateReview(request.POST)
-    if request.method == 'POST' and form_review.is_valid():
-        review = form_review.save(commit=False)
-        review.ticket = ticket
-        review.user = request.user
-        review.save()
-        return redirect('ticketlist')
+
+    if request.method == 'POST':
+        form_review = forms.CreateReview(request.POST)
+        if form_review.is_valid():
+            review = form_review.save(commit=False)
+            review.ticket = ticket
+            review.user = request.user
+            review.save()
+            return redirect('feed')
+    else:
+        form_review = forms.CreateReview()  # formulaire vide pour GET
     # GET ou formulaire invalide → affichage du ticket + formulaire review
     context = {
         'ticket': ticket,         # pour afficher titre, description, etc.
@@ -79,7 +83,7 @@ def create_ticket_and_review_page(request):
     # Toujours renvoyer un HttpResponse pour GET ou POST invalide
     return render(
         request,
-        'litreview/ticket-review.html', 
+        'litreview/ticket-review.html',
         {'ticket_form': form_ticket, 'review_form': form_review}
     )
 
