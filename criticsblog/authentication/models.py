@@ -15,17 +15,25 @@ class UserFollow(models.Model):
         followed_user → l’utilisateur qui est suivi
         related_name → permet d’accéder à la relation depuis l’autre modèle (User)
     """
-
+    # Chaque relation indique quel utilisateur suit d’autres utilisateurs
     user = models.ForeignKey(
-        to=settings.AUTH_USER_MODEL,
+        to=settings.AUTH_USER_MODEL, 
+        # ce champ est lié au modèle utilisateur utilisé par le projet
+        # ForeignKey vers le modèle User défini dans les paramètres Django
+
         on_delete=models.CASCADE,
         related_name='following'
     )
+    # 'following' : permet d’accéder aux relations de suivi de
+    # utilisateurs qu’il suit.
+
     followed_user = models.ForeignKey(
         to=settings.AUTH_USER_MODEL,
         on_delete=models.CASCADE,
         related_name='followed_by'
     )
+    # related_name='followed_by' : permet d’accéder aux utilisateurs 
+    # qui suivent cet utilisateur
 
     def __str__(self):
         return f"{self.user.username} -> {self.followed_user.username}"

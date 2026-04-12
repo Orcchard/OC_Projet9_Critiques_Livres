@@ -35,13 +35,13 @@ urlpatterns = [
     path('logout/', logout_user, name='logout'),
     # page principale abonnements
     path('suscribe/', suscribe_page, name='suscribe'),
+
+    # suivre / se désabonner
     path('follow_user/<int:user_id>/', follow_user_page, name='followuser'),
     path('unfollow_user/<int:user_id>/', unfollow_user_page, name='unfollowuser'),
     path('feed/', feed, name='feed'),
 
-    # suivre / se désabonner
-    # path('follow/<int:user_id>/', follow_user_page, name='follow_user'),
-    # path('unfollow/<int:user_id>/', unfollow_user_page, name='unfollow_user'),
+
     path('ticket/newticket/<int:ticket_id>', newticket_page, name='newticket'),
     path('ticket/newticket/', newticket_page, name='newticket'),
     path('review/newreview/<int:ticket_id>', newreview_page, name='newreview'),

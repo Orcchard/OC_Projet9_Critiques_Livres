@@ -368,7 +368,7 @@ body {
 }
 
 .ticket-card {
-    /*border: 2px solid #333;*/
+    border: 2px solid #333;
     padding: 20px;
     margin-bottom: 30px;
     border-radius: 8px;

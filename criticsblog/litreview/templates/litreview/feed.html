@@ -1,6 +1,5 @@
 {% extends "base.html" %}
 
-
 {% block content %}
 <div class="container">
     <h1>Flux</h1>
@@ -10,54 +9,48 @@
             <!-- Ticket -->
             <div class="ticket-card">
                 <div class="ticket-header">
-                    {% if post.image %}
-                        <div class="ticket-image">
-                            <img src="{{ post.image.url }}" alt="Image du ticket">
-                        </div>
-                    {% endif %}
-                    <div class="ticket-info">
-                        <p class="ticket-meta">
-                            {{ post.user.username }} - le 
-                            {{ post.time_created|date:"d/m/Y H:i" }}
-                        </p>
-                        <h2 class="ticket-title">{{ post.title }}</h2>
-                        <p class="ticket-description"> {{ post.description }}</p>
+                {% if post.image %}
+                    <div class="ticket-image">
+                        <img src="{{ post.image.url }}" alt="Image du ticket">
+                    </div>
+                {% endif %}
+                <div class="ticket-info">
+                    <p class="ticket-meta">
+                        {{ post.user.username }} - le 
+                        {{ post.time_created|date:"d/m/Y H:i" }}
+                    </p>
+                    <h2 class="ticket-title">{{ post.title }}</h2>
+                    <p class="ticket-description"> {{ post.description }}</p>
                         
 
-                        <!-- Actions Ticket -->
-                        {% if post.user == request.user %}
-                            <div class="ticket-actions">
-                                <a href="{% url 'edit_ticket' post.id %}" class="btn btn-edit">Modifier</a>
-                                <a href="{% url 'delete_ticket' post.id %}" class="btn btn-delete">Supprimer</a>
-                            </div>
-                        {% endif %}
+                    <!-- Actions Ticket -->
+                    {% if post.user == request.user %}
+                        <div class="ticket-actions">
+                            <a href="{% url 'edit_ticket' post.id %}" class="btn btn-edit">Modifier</a>
+                            <a href="{% url 'delete_ticket' post.id %}" class="btn btn-delete">Supprimer</a>
+                        </div>
+                    {% endif %}
 
-                        <!-- BOUTON AJOUTER UNE REVIEW (uniquement pour créateur ou utilisateurs suivis) -->
-                        {% if post.user.id == request.user.id or post.user.id in following_ids %}
-                        <p>
-                        <a href="{% url 'newreview' post.id %}" class="btn">Ajouter une review</a>
+                    <!-- BOUTON AJOUTER UNE REVIEW (uniquement pour repondre à un  ticket) -->
+                    {% if post.user.id == request.user.id or post.user.id in following_ids %}
+                        <p><a href="{% url 'newreview' post.id %}" class="btn">Ajouter une review</a>
                         </p>
-                        {% endif %}
+                    {% endif %}
                 </div>
             </div>
-        </div>
+    </div>
     {% elif post.content_type == 'REVIEW' %}
-            <!-- Review indépendante -->
             <div class="review-card">
 
                 <!-- Note au nombre d'étoiles -->
                 <span class="rating">
-                {% for i in "12345"|make_list %}
-                    {% if forloop.counter <= post.rating %}
+                {% for i in rating_range %}
+                    {% if i <= post.rating %}
                         ★
                     {% else %}
                         ☆
                     {% endif %}
                 {% endfor %}
-                <!-- make_list transforme "12345" en ['1', '2', '3', '4', '5']
-                |slice:":post.rating" → prend les post.rating premiers caractères.
-|               make_list → transforme en liste de caractères 
-                pour la boucle for.-->
                 </span>
                 <strong class="review-headline">  {{ post.headline }}</strong>
                 <em class="review-meta">Review 

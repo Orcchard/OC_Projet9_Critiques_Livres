@@ -5,7 +5,7 @@ from django.contrib import messages
 from django.conf import settings
 from django.shortcuts import render, redirect, get_object_or_404
 from litreview.models import Ticket, Review
-from .models import UserFollow, User
+from .models import UserFollow
 from litreview.forms import CreateTicket
 from django import forms
 from django.contrib.auth.models import User

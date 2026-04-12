@@ -8,6 +8,10 @@ from itertools import chain
 from django.db.models import CharField, Value
 from authentication.models import UserFollow
 
+MAX_RATING = 5
+MIN_RATING = 1
+DEFAULT_STARS = 3
+
 
 @login_required
 def newticket_page(request):
@@ -17,6 +21,7 @@ def newticket_page(request):
     if request.method == 'POST':
         # créer une instance de notre formulaire et le remplir des données POST
         form = forms.CreateTicket(request.POST, request.FILES)
+        # Méthode get qui affiche le formulaire
         if form.is_valid():
             ticket = form.save(commit=False)
             ticket.user = request.user
@@ -43,13 +48,16 @@ def newreview_page(request, ticket_id):
             review.save()
             return redirect('feed')
     else:
-        form_review = forms.CreateReview()  # formulaire vide pour GET
-    # GET ou formulaire invalide → affichage du ticket + formulaire review
+        form_review = forms.CreateReview()  
+        # formulaire vide pour GET
+        # GET ou formulaire invalide → affichage du ticket + formulaire review
+        # Méthode get qui affiche le formulaire
     context = {
         'ticket': ticket,         # pour afficher titre, description, etc.
         'review_form': form_review,
     }
     return render(request, 'litreview/newreview.html', context)
+    # Méthode get qui affiche le formulaire
 
 
 @login_required
@@ -126,6 +134,7 @@ def feed(request):
 
     Returns:
         render: Rend le template 'litreview/feed.html' avec le contexte {'posts': posts}."""
+
     # IDs des utilisateurs suivis
     following_ids = list(UserFollow.objects.filter(
         user=request.user
@@ -135,7 +144,7 @@ def feed(request):
     # où le champ user correspond au user connecté request.user
     # values_list() : permet de récupérer un ou plusieurs champs précis des objets filtrés,
     # plutôt que de récupérer tout l’objet complet.
-
+    # flat=True [2, 5, 9] → une liste plate d’IDs, directement utilisable
     # inclure le user lui-même
     users_ids = following_ids + [request.user.id]  
     # ajoute l’ID du user connecté à la liste
@@ -163,9 +172,12 @@ def feed(request):
     # chain:Permet de concaténer deux itérables (ici tickets et reviews)
     # sans créer une nouvelle liste temporaire
 
+    rating_range = range(MIN_RATING, MAX_RATING + 1)  # passe le range des étoiles au template
     return render(
         request, 'litreview/feed.html',
-        {'posts': posts, 'following_ids': following_ids, })  # pour le template
+        {
+            'posts': posts, 'following_ids': following_ids, 'rating_range': rating_range,
+        })  # pour le template
 
 
 @login_required
@@ -208,7 +220,6 @@ def delete_ticket(request, ticket_id):
 
     return render(
         request, 'litreview/delete_ticket.html', {'ticket': ticket})
-
 
 
 @login_required
