@@ -349,18 +349,17 @@ body {
         width: 90%;
         min-height: auto;
     }
-}
 
-.left-section,
-.right-section {
-    padding: 30px 20px;
-}
+    .left-section,
+    .right-section {
+        padding: 30px 20px;
+    }
 
-.container {
-    width: 90%;
-    padding: 20px;
+    .container {
+        width: 90%;
+        padding: 20px;
+    }
 }
-
 
 .ticket-container {
     width: 80%;
@@ -488,32 +487,6 @@ body {
     /* texte en gras */
 }
 
-.review-header {
-    display: flex;
-    /* aligne étoiles et headline horizontalement */
-    align-items: center;
-    /* centre verticalement */
-    gap: 10px;
-    /* espace entre étoiles et titre */
-    margin-bottom: 8px;
-    /* petit espace en dessous pour séparer du reste */
-}
-
-.btn-following {
-    padding: 12px 30px;
-    background-color: #e0e0e0;
-    color: #333;
-    border: 1px solid #ccc;
-    border-radius: 4px;
-    font-size: 16px;
-    font-weight: bold;
-    text-align: center;
-    text-decoration: none;
-    display: inline-block;
-    cursor: pointer;
-    transition: all 0.3s;
-}
-
 .user-table th,
 .user-table td {
     padding: 10px;
@@ -526,15 +499,31 @@ body {
 }
 
 .btn-following {
+
+
+
+    cursor: pointer;
+}
+
+.btn-following {
     padding: 5px 10px;
     background-color: #007bff;
     color: white;
+    border: 1px solid #007bff;
+    border-radius: 4px;
     text-decoration: none;
     border-radius: 4px;
+    font-size: 16px;
+    text-align: center;
+    cursor: pointer;
+    font-weight: bold;
+    display: inline-block;
+    transition: background-color 0.3s, border-color 0.3s;
 }
 
 .btn-following:hover {
     background-color: #0056b3;
+    border-color: #0056b3;
 }
 
 
@@ -552,18 +541,6 @@ body {
     border-bottom: 1px solid #ddd;
 }
 
-.btn-following {
-    padding: 5px 10px;
-    background-color: #007bff;
-    color: white;
-    text-decoration: none;
-    border-radius: 4px;
-}
-
-.btn-following:hover {
-    background-color: #0056b3;
-}
-
 hr {
     border: none;
     /* retire la bordure par défaut */
@@ -573,4 +550,53 @@ hr {
     /* couleur de la ligne */
     margin: 20px 0;
     /* espace au-dessus et en dessous */
+}
+
+.follow-btn {
+    background: blue;
+    color: white;
+}
+
+.unfollow-btn {
+    background: red;
+    color: white;
+}
+
+.search-form {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+/* champ de recherche */
+.search-form input[type="text"] {
+    flex: 1;
+    padding: 8px 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 14px;
+    background-color: #fff;
+    transition: border 0.3s;
+}
+
+.search-form input[type="text"]:focus {
+    outline: none;
+    border-color: #007bff;
+}
+
+/* bouton recherche (si tu en ajoutes un) */
+.search-form button {
+    padding: 5px 10px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background-color 0.3s;
+}
+
+.search-form button:hover {
+    background-color: #0056b3;
 }

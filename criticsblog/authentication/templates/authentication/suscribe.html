@@ -5,21 +5,30 @@
     <h1>Souscription</h1>
     <hr>
 
-    <!-- Tous les adhérents -->
-    <h2>Tous les adhérents</h2>
+    <!-- Recherche abonné -->
+    <h2>Recherche d'un abonné</h2>
+    <form method="get" class="search-form">
+
+    <input type="text"  name="q"  placeholder="Nom exact de l'utilisateur"
+    value="{{ request.GET.q }}">
+
+    <button type="submit">Rechercher</button>
+    </form>
     <div class="user-list">
-        {% for user in users %}
-        <div class="user-item">
-            <span class="username">{{ user.username }}</span>
-            {% if user in following %}
-                <a href="{% url 'unfollowuser' user.id %}" class="btn-following">Se désabonner</a>
+        {% if search_user %}
+            <div class="user-item">
+            <span class="username">{{ search_user.username }}</span>
+
+            {% if search_user in following %}
+                <a href="{% url 'unfollowuser' search_user.id %}" class="btn-following">Se désabonner</a>
             {% else %}
-                <a href="{% url 'followuser' user.id %}" class="btn-following">S'abonner</a>
+                <a href="{% url 'followuser' search_user.id %}" class="btn-following">S'abonner</a>
             {% endif %}
         </div>
-        {% endfor %}
+        {% elif request.GET.q %}
+            <p>Aucun utilisateur trouvé.</p>
+        {% endif %}
     </div>
-
     <hr>
 
     <!-- Les utilisateurs que je suis -->
@@ -28,12 +37,15 @@
         {% for user in following %}
         <div class="user-item">
             <span class="username">{{ user.username }}</span>
+            <a href="{% url 'unfollowuser' user.id %}" class="btn-following">
+                Se désabonner
+            </a>
         </div>
         {% empty %}
         <p>Vous ne suivez encore personne.</p>
         {% endfor %}
     </div>
-
+    <hr>
     <!-- Mes abonnés -->
     <h2>Mes abonnés</h2>
     <div class="user-list">

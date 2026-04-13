@@ -1,19 +1,23 @@
-from django.contrib.auth.decorators import login_required
-from django.contrib.auth import authenticate, login, logout
-from django.contrib.auth import get_user_model
-from django.contrib import messages
+from django import forms
 from django.conf import settings
+from django.contrib import messages
+from django.contrib.auth import authenticate, login, logout, get_user_model
+from django.contrib.auth.decorators import login_required
+from django.contrib.auth.models import User
+from django.http import JsonResponse
 from django.shortcuts import render, redirect, get_object_or_404
+
+# Applications externes (autres apps du projet)
+from litreview.forms import CreateTicket
 from litreview.models import Ticket, Review
 from .models import UserFollow
-from litreview.forms import CreateTicket
-from django import forms
-from django.contrib.auth.models import User
 
+# Imports locaux
+from .models import UserFollow
 from .forms import SignUpForm, LoginForm
 
 
-# User = get_user_model()
+User = get_user_model()
 
 
 def signup_page(request):
@@ -71,24 +75,22 @@ def logout_user(request):
     return redirect("login")
 
 
-def followers_list(request):
-    """Missing"""
-    followers_relations = request.user.followed_by.all()
-    followers = [relation.user for relation in followers_relations]
-    return render(request, 'followers_list.html', {
-        'followers': followers
-    })
-
-
 def suscribe_page(request):
     """Missing"""
-    # Tous les utilisateurs sauf soi-même pour l'interface, 
-    # un user ne peux s'appeler
-    users = User.objects.exclude(id=request.user.id)
+    query = request.GET.get('q') # récupère la valeur tapée dans la barre de recherche
+    search_user = None
+    # Initialisation de la variable
+    if query:     # l'utilisateur a t'il saisi?
+        query = query.strip()  # enlève espaces invisibles
+        try:
+            search_user = User.objects.get(username=query)  # recherche EXACTE
+            # empêcher de se rechercher soi-même
+            if search_user == request.user:
+                search_user = None
+        except User.DoesNotExist:
+            search_user = None
+            messages.warning(request, "Aucun abonné à ce nom.")
     # Utilisateurs que je suis
-    # on récupère des utilisateurs (User) à partir de la base de données
-    #  User.objects est un manager Django,Tu utilises
-    # ce manager pour interroger la base de données.
     following = User.objects.filter(followed_by__user=request.user)
     # followed_by_user:syntaxe de Django ORM pour traverser une relation
     # le double underscore __ clé pour comprendre Django ORM et la façon dont
@@ -104,7 +106,7 @@ def suscribe_page(request):
     # Donne-moi tous les utilisateurs qui me suivent
 
     return render(request, "authentication/suscribe.html", {
-        'users': users,
+        'search_user': search_user,
         'following': following,
         'followers': followers,
     })

@@ -40,8 +40,6 @@ urlpatterns = [
     path('follow_user/<int:user_id>/', follow_user_page, name='followuser'),
     path('unfollow_user/<int:user_id>/', unfollow_user_page, name='unfollowuser'),
     path('feed/', feed, name='feed'),
-
-
     path('ticket/newticket/<int:ticket_id>', newticket_page, name='newticket'),
     path('ticket/newticket/', newticket_page, name='newticket'),
     path('review/newreview/<int:ticket_id>', newreview_page, name='newreview'),
