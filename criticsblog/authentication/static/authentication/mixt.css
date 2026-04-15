@@ -600,3 +600,12 @@ hr {
 .search-form button:hover {
     background-color: #0056b3;
 }
+
+.btn-disabled {
+    background-color: #ccc;
+    color: #666;
+    cursor: not-allowed;
+    border: none;
+    padding: 10px 15px;
+    border-radius: 6px;
+}

@@ -65,8 +65,20 @@ def login_page(request):
 
 @login_required
 def home(request):
-    # récupère tous les tickets
-    return render(request, "authentication/home.html")
+    users = UserFollow.objects.values_list(
+        'user__username',
+        'followed_user__username'
+    )
+
+    # on aplati + on enlève les doublons
+    unique_users = set()
+    for u1, u2 in users:
+        unique_users.add(u1)
+        unique_users.add(u2)
+
+    return render(request, "authentication/home.html", {
+        "users": unique_users
+    })
 
 
 def logout_user(request):

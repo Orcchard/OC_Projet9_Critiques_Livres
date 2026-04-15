@@ -48,7 +48,7 @@ def newreview_page(request, ticket_id):
             review.save()
             return redirect('feed')
     else:
-        form_review = forms.CreateReview()  
+        form_review = forms.CreateReview()
         # formulaire vide pour GET
         # GET ou formulaire invalide → affichage du ticket + formulaire review
         # Méthode get qui affiche le formulaire
@@ -115,11 +115,13 @@ def review_list_page(request):
     return render(request, 'litreview/reviewlist.html', context)
 
 
+@login_required
 def feed(request):
     """Prépare et retourne le flux d'activité (feed) pour le user connecté.
 
     Le feed contient :
-    1. Tous les tickets créés par le user connecté et par les utilisateurs qu'il suit.
+    1. Tous les tickets créés par le user connecté et par les utilisateurs 
+        qu'il suit.
     2. Toutes les reviews créées par le user connecté et par les utilisateurs qu'il suit.
 
     Chaque objet est annoté d'un champ temporaire 'content_type' :
@@ -133,12 +135,13 @@ def feed(request):
         request: HttpRequest de Django représentant le user connecté.
 
     Returns:
-        render: Rend le template 'litreview/feed.html' avec le contexte {'posts': posts}."""
+        render: Rend le template 'litreview/feed.html'
+        avec le contexte {'posts': posts}."""
 
     # IDs des utilisateurs suivis
     following_ids = list(UserFollow.objects.filter(
         user=request.user
-    ).values_list('followed_user', flat=True))
+    ).values_list('followed_user_id', flat=True))
 
     # On récupère tous les objets UserFollow
     # où le champ user correspond au user connecté request.user
@@ -146,38 +149,39 @@ def feed(request):
     # plutôt que de récupérer tout l’objet complet.
     # flat=True [2, 5, 9] → une liste plate d’IDs, directement utilisable
     # inclure le user lui-même
-    users_ids = following_ids + [request.user.id]  
+    users_ids = following_ids + [request.user.id]
     # ajoute l’ID du user connecté à la liste
 
     # tickets (les miens + ceux que je suis)
     tickets = Ticket.objects.filter(
-        user__in=users_ids
-    )
-    # ajouter un champ pour différencier
-    tickets = tickets.annotate(content_type=Value('TICKET', CharField()))
-    # user__in=users → filtre uniquement les tickets dont le champ user est dans la liste users
+        user_id__in=users_ids
+    ).order_by('-time_created')  # - trier par ordre décroissant
 
-    # reviews (les miennes + celles que je suis)
-    reviews = Review.objects.filter(user__in=users_ids)
+    # reviews liées (les miennes + celles des users que je suis)
+    reviews = Review.objects.filter(
+        user__id__in=users_ids
+        )
+    # Regroupement des reviews par ticket
 
-    reviews = reviews.annotate(content_type=Value('REVIEW', CharField()))
-    # crées un champ temporaire pour chaque objet
+    reviews_by_ticket = {}
 
-    # fusion + tri date décroissante
-    posts = sorted(
-        chain(tickets, reviews),
-        key=lambda post: post.time_created,
-        reverse=True
-    )
-    # chain:Permet de concaténer deux itérables (ici tickets et reviews)
-    # sans créer une nouvelle liste temporaire
+    for review in reviews:  # récupère l’ID du ticket lié à la review
+        reviews_by_ticket.setdefault(review.ticket_id, []).append(review)
+        # setdefault verifie si clé existe dans dictionnaire, evite un test if
 
-    rating_range = range(MIN_RATING, MAX_RATING + 1)  # passe le range des étoiles au template
-    return render(
-        request, 'litreview/feed.html',
-        {
-            'posts': posts, 'following_ids': following_ids, 'rating_range': rating_range,
-        })  # pour le template
+    # Liste des tickets déjà commentés (IMPORTANT pour bouton grisé)
+    tickets_with_reviews = set(reviews_by_ticket.keys())
+
+    rating_range = range(MIN_RATING, MAX_RATING + 1)
+    # passe le range des étoiles au template
+
+    return render(request, 'litreview/feed.html', {
+        'tickets': tickets,
+        'reviews_by_ticket': reviews_by_ticket,
+        'tickets_with_reviews': tickets_with_reviews,
+        'following_ids': following_ids,
+        'rating_range': rating_range,
+    })
 
 
 @login_required

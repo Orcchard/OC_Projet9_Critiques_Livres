@@ -2,8 +2,14 @@
 
 {% block content %}
 <div class="container">
-    <p> Bonjour:  {{ user.username }} </p>
-    
+
+    <p>Bonjour : {{ user.username }}</p>
+
+    <h2>Liste des abonnés</h2>
+
+    {% for u in users %}
+        <p>{{ u }}</p>
+    {% endfor %}
+
 </div>
 {% endblock %}
-

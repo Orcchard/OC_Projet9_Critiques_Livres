@@ -37,3 +37,12 @@ class Review(models.Model):
 
     def __str__(self):
         return f'{self.headline} by {self.user} - {self.time_created}'
+
+
+    class Meta:
+        constraints = [
+            models.UniqueConstraint(
+                fields=['ticket', 'user'],
+                name='unique_review_per_user_per_ticket'
+            )
+        ]
