@@ -17,7 +17,7 @@ Including another URLconf
 from django.contrib import admin
 from django.urls import path
 from authentication.views import signup_page, login_page, home, logout_user
-from authentication.views import suscribe_page, follow_user_page, unfollow_user_page
+from authentication.views import subscribe_page, follow_user_page, unfollow_user_page
 from litreview.views import newticket_page, newreview_page
 from litreview.views import ticket_list_page, review_list_page
 from litreview.views import create_ticket_and_review_page
@@ -34,7 +34,7 @@ urlpatterns = [
     path('', home, name='home'),
     path('logout/', logout_user, name='logout'),
     # page principale abonnements
-    path('suscribe/', suscribe_page, name='suscribe'),
+    path('subscribe/', subscribe_page, name='subscribe'),
 
     # suivre / se désabonner
     path('follow_user/<int:user_id>/', follow_user_page, name='followuser'),
