@@ -87,7 +87,7 @@ def logout_user(request):
     return redirect("login")
 
 
-def suscribe_page(request):
+def subscribe_page(request):
     """Missing"""
     query = request.GET.get('q') # récupère la valeur tapée dans la barre de recherche
     search_user = None
@@ -117,7 +117,7 @@ def suscribe_page(request):
     # une relation ForeignKey / related_name.
     # Donne-moi tous les utilisateurs qui me suivent
 
-    return render(request, "authentication/suscribe.html", {
+    return render(request, "authentication/subscribe.html", {
         'search_user': search_user,
         'following': following,
         'followers': followers,
@@ -139,7 +139,7 @@ def follow_user_page(request, user_id):
             user=request.user,
             followed_user=other_user
         )
-        return redirect('suscribe')
+        return redirect('subscribe')
 
 
 @login_required
@@ -162,4 +162,4 @@ def unfollow_user_page(request, user_id):
         ).delete()
 
     # retour à la page précédente ou accueil
-    return redirect('suscribe')
+    return redirect('subscribe')
