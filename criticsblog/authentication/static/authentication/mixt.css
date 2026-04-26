@@ -356,7 +356,7 @@ body {
     }
 
     .container {
-        width: 90%;
+        width: 80%;
         padding: 20px;
     }
 }
@@ -369,43 +369,53 @@ body {
 .ticket-card {
     border: 2px solid #333;
     padding: 20px;
-    margin-bottom: 30px;
+    margin-bottom: 60px;
     border-radius: 8px;
+    position: relative;
 }
 
 .ticket-image {
-    width: 200px;
-    height: 250PX;
+    width: 250px;
+    height: 300px;
     margin-bottom: 10px;
 }
 
 .ticket-image img {
-    width: 200px;
-    height: 250px;
+    width: 250px;
+    height: 300px;
     /* 👈 augmente ici */
     object-fit: cover;
     /* garde un bon cadrage */
     border-radius: 8px;
 }
 
-
-
 .review-card {
     border: 1px solid #999;
     padding: 15px;
+    padding-bottom: 60px;
     margin-top: 15px;
     border-radius: 8px;
     background-color: #f9f9f9;
+    position: relative;
+}
+
+.post-actions {
+    position: absolute;
+    bottom: 10px;
+    left: 10px;
+    display: flex;
+    gap: 10px;
 }
 
 .review-card p {
-    border: 1px solid #ccc;
+    border: 1px solid #999;
     /* bordure grise autour du body */
-    padding: 8px;
+    padding: 15px;
     /* espace à l'intérieur de la bordure */
-    border-radius: 5px;
+    margin-top: 15px;
+    border-radius: 8px;
     /* coins arrondis */
-    background-color: #fff;
+    background-color: black;
     /* fond blanc */
 }
 
@@ -416,8 +426,7 @@ body {
     /* centre verticalement */
     gap: 10px;
     /* espace entre étoiles et titre */
-    margin-bottom: 8px;
-    /* petit espace en dessous pour séparer du reste */
+    flex-wrap: wrap;
 }
 
 /* Message "Aucune critique" en rouge */
@@ -429,7 +438,7 @@ body {
 
 .ticket-info {
     flex: 1;
-    align-items: right;
+    text-align: right;
 }
 
 .ticket-title {
@@ -455,30 +464,34 @@ body {
     gap: 20px;
 }
 
+.review-header {
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    /* espace entre éléments */
+    flex-wrap: wrap;
+    /* sécurité si écran petit */
+}
+
 .rating {
-    color: gold;
-    /* étoiles dorées */
-    font-size: 1.2em;
+    font-size: 18px;
     /* légèrement plus grosses */
 }
 
 .review-headline {
-    margin-right: 10px;
-    /* espace avec la meta */
+    font-weight: bold
 }
 
-/* Le meta à droite */
+/* Le meta  */
 .review-meta {
-    color: #555;
-    float: right;
-    /* pousse à droite sur la même ligne */
+    color: #19c40d;
     font-style: italic;
-    color: #555;
+    font-size: 13px
 }
 
 .review-body {
-    margin-top: 10px;
-    font-size: 16px;
+    margin-top: 8px;
+    font-size: 15px;
     font-style: italic;
     line-height: 1.4;
     text-align: left;
@@ -496,13 +509,6 @@ body {
 
 .user-table th {
     background-color: #f5f5f5;
-}
-
-.btn-following {
-
-
-
-    cursor: pointer;
 }
 
 .btn-following {
@@ -525,7 +531,6 @@ body {
     background-color: #0056b3;
     border-color: #0056b3;
 }
-
 
 .user-list {
     display: flex;
@@ -608,4 +613,20 @@ hr {
     border: none;
     padding: 10px 15px;
     border-radius: 6px;
+}
+
+.action-buttons-feed {
+    position: fixed;
+    top: 70px;
+    right: 260px;
+    /* 👈 plus respirant */
+    display: flex;
+    gap: 15px;
+    z-index: 1000;
+}
+
+.action-buttons-feed .btn {
+    padding: 14px 35px;
+    /* plus gros que global */
+    font-size: 17px;
 }
