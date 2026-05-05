@@ -31,8 +31,8 @@ class Review(models.Model):
     time_created = models.DateTimeField(default=timezone.now)
     headline = models.CharField(max_length=128)
     rating = models.PositiveSmallIntegerField(
-        validators=[MinValueValidator(0), MaxValueValidator(5)]
-    )
+        validators=[MinValueValidator(1), MaxValueValidator(5)]
+    )# garanti que la notre est entre 1 et 5
     body = models.TextField(max_length=8192, blank=True)
 
     def __str__(self):
