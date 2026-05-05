@@ -1,8 +1,8 @@
-from django.shortcuts import render, get_object_or_404
+from django.shortcuts import render, get_object_or_404, redirect
 from litreview.models import Ticket, Review
+from litreview.services import get_actions_for_post
 from .forms import CreateTicket, CreateReview
 from django.contrib.auth.decorators import login_required
-from django.shortcuts import render, redirect, get_object_or_404
 from . import forms, models
 from itertools import chain
 from django.db.models import CharField, Value
@@ -11,6 +11,9 @@ from authentication.models import UserFollow
 MAX_RATING = 5
 MIN_RATING = 1
 DEFAULT_STARS = 3
+rating_range = range(MIN_RATING, MAX_RATING + 1)
+
+
 
 
 @login_required
@@ -52,19 +55,18 @@ def newreview_page(request, ticket_id):
         # formulaire vide pour GET
         # GET ou formulaire invalide → affichage du ticket + formulaire review
         # Méthode get qui affiche le formulaire
+        # pour afficher titre, description, etc.
     context = {
-        'ticket': ticket,         # pour afficher titre, description, etc.
+        'ticket': ticket,         
         'review_form': form_review,
     }
     return render(request, 'litreview/newreview.html', context)
     # Méthode get qui affiche le formulaire
 
-
 @login_required
 def create_ticket_and_review_page(request):
     """Vue pour créer une nouvelle critique liée à un ticket vierge.
     Accessible uniquement aux utilisateurs connectés."""
-
     if request.method == 'POST':
         # créer une instance de notre formulaire et le remplir des données POST
         form_ticket = forms.CreateTicket(request.POST, request.FILES)
@@ -95,99 +97,19 @@ def create_ticket_and_review_page(request):
         {'ticket_form': form_ticket, 'review_form': form_review}
     )
 
+from itertools import chain
+from django.db.models import CharField, Value
+from django.contrib.auth.decorators import login_required
+from django.shortcuts import render
 
-@login_required
-def ticket_list_page(request):
-    """Affiche toutes les  tickets """
-    tickets = Ticket.objects.all().order_by('-time_created')
-    return render(request, 'litreview/ticketlist.html', {'tickets': tickets})
-
-
-@login_required
-def review_list_page(request):
-    """Affiche toutes les reviews avec leurs tickets associés."""
-    tickets = Ticket.objects.prefetch_related(
-        'review_set'
-        ).order_by('-time_created')
-    context = {
-        'tickets': tickets
-    }
-    return render(request, 'litreview/reviewlist.html', context)
-
-
-@login_required
-def feed(request):
-    """Prépare et retourne le flux d'activité (feed) pour le user connecté.
-
-    Le feed contient :
-    1. Tous les tickets créés par le user connecté et par les utilisateurs 
-        qu'il suit.
-    2. Toutes les reviews créées par le user connecté et par les utilisateurs qu'il suit.
-
-    Chaque objet est annoté d'un champ temporaire 'content_type' :
-        - 'TICKET' pour les tickets
-        - 'REVIEW' pour les reviews
-
-    Les objets sont ensuite fusionnés dans une seule liste et triés par date
-    de création décroissante (du plus récent au plus ancien).
-
-    Args:
-        request: HttpRequest de Django représentant le user connecté.
-
-    Returns:
-        render: Rend le template 'litreview/feed.html'
-        avec le contexte {'posts': posts}."""
-
-    # IDs des utilisateurs suivis
-    following_ids = list(UserFollow.objects.filter(
-        user=request.user
-    ).values_list('followed_user_id', flat=True))
-
-    # On récupère tous les objets UserFollow
-    # où le champ user correspond au user connecté request.user
-    # values_list() : permet de récupérer un ou plusieurs champs précis des objets filtrés,
-    # plutôt que de récupérer tout l’objet complet.
-    # flat=True [2, 5, 9] → une liste plate d’IDs, directement utilisable
-    # inclure le user lui-même
-    users_ids = following_ids + [request.user.id]
-    # ajoute l’ID du user connecté à la liste
-
-    # tickets (les miens + ceux que je suis)
-    tickets = Ticket.objects.filter(
-        user_id__in=users_ids
-    ).order_by('-time_created')  # - trier par ordre décroissant
-
-    # reviews liées (les miennes + celles des users que je suis)
-    reviews = Review.objects.filter(
-        user__id__in=users_ids
-        )
-    # Regroupement des reviews par ticket
-
-    reviews_by_ticket = {}
-
-    for review in reviews:  # récupère l’ID du ticket lié à la review
-        reviews_by_ticket.setdefault(review.ticket_id, []).append(review)
-        # setdefault verifie si clé existe dans dictionnaire, evite un test if
-
-    # Liste des tickets déjà commentés (IMPORTANT pour bouton grisé)
-    tickets_with_reviews = set(reviews_by_ticket.keys())
-
-    rating_range = range(MIN_RATING, MAX_RATING + 1)
-    # passe le range des étoiles au template
-
-    return render(request, 'litreview/feed.html', {
-        'tickets': tickets,
-        'reviews_by_ticket': reviews_by_ticket,
-        'tickets_with_reviews': tickets_with_reviews,
-        'following_ids': following_ids,
-        'rating_range': rating_range,
-    })
+from litreview.models import Ticket, Review
+from authentication.models import UserFollow
+from django.contrib.auth.models import User
 
 
 @login_required
 def edit_ticket(request, ticket_id):
     ticket = get_object_or_404(Ticket, id=ticket_id, user=request.user)
-
     if request.method == 'POST':
         form = CreateTicket(request.POST, request.FILES, instance=ticket)
         if form.is_valid():
@@ -197,7 +119,6 @@ def edit_ticket(request, ticket_id):
         form = CreateTicket(instance=ticket)
 
     return render(request, 'litreview/edit_ticket.html', {'form': form})
-
 
 @login_required
 def edit_review(request, review_id):
@@ -213,18 +134,14 @@ def edit_review(request, review_id):
 
     return render(request, 'litreview/edit_review.html', {'form': form})
 
-
 @login_required
 def delete_ticket(request, ticket_id):
     ticket = get_object_or_404(Ticket, id=ticket_id, user=request.user)
-
     if request.method == 'POST':
         ticket.delete()
         return redirect('feed')
-
     return render(
         request, 'litreview/delete_ticket.html', {'ticket': ticket})
-
 
 @login_required
 def delete_review(request, review_id):
@@ -233,3 +150,78 @@ def delete_review(request, review_id):
         review.delete()
         return redirect('feed')
     return render(request, 'litreview/delete_review.html', {'review': review})
+
+
+@login_required
+def feed(request):
+    # utilisateurs suivis + moi-même
+    following_users = User.objects.filter(
+        followed_by__user=request.user
+    )
+    allowed_users = list(following_users) + [request.user]
+
+    # tickets visibles
+    tickets = Ticket.objects.filter(
+        user__in=allowed_users
+    ).annotate(
+        content_type=Value('TICKET', CharField())
+    )
+
+    # reviews visibles
+    reviews = Review.objects.filter(
+        user__in=allowed_users
+    ).annotate(
+        content_type=Value('REVIEW', CharField())
+    )
+
+    # Association de l’id d’un ticket à sa review
+    # “je prends chaque élément de la liste reviews, un par un”
+    reviews_by_ticket = {}
+    for review in reviews:
+        reviews_by_ticket[review.ticket.id] = review  
+        print(f" reviews_by_ticket : {reviews_by_ticket}")
+
+    posts = sorted(
+        chain(tickets, reviews),
+        key=lambda post: post.time_created,
+        reverse=True)
+
+    #  calcul des actions pour chaque post
+    posts_with_actions = []
+
+    for post in posts:
+        actions = get_actions_for_post(post, request.user, reviews_by_ticket)
+        posts_with_actions.append({
+            "post": post,
+            "actions": actions
+        })
+        print(f" post with action === {posts_with_actions}")
+
+    return render(request, 'litreview/feed.html', {
+        "posts_with_actions": posts_with_actions,
+        "rating_range": range(MIN_RATING, MAX_RATING + 1),
+    })
+
+@login_required
+def post(request):
+    user = request.user
+    # mes tickets
+    tickets = Ticket.objects.filter(user=user).order_by('-time_created')
+    # mes reviews (j’en suis l’auteur)
+    my_reviews = Review.objects.filter(user=user).select_related("ticket", "user")
+
+    # reviews reçues sur mes tickets
+    reviews_on_my_tickets = Review.objects.filter(
+        ticket__user=user
+    ).select_related("user", "ticket").order_by('-time_created')
+
+    rating_range = range(MIN_RATING, MAX_RATING + 1)
+    # sert à créer :1, 2, 3, 4, 5
+    # pour que le template puisse faire une boucle 1, 2, 3, 4, 5
+
+    return render(request, 'litreview/post.html', {
+        'tickets': tickets,
+        'my_reviews': my_reviews,
+        'reviews_on_my_tickets': reviews_on_my_tickets,
+        'rating_range': rating_range,
+    })
