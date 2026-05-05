@@ -1,96 +1,133 @@
 {% extends "base.html" %}
 {% block content %}
+
 <h1 class="feed-title">Feed</h1>
+
 <div class="action-buttons-feed">
     <a href="{% url 'newticket' %}" class="header-btn btn">Créer un ticket</a>
     <a href="{% url 'ticketreview' %}" class="header-btn btn">Créer une review</a>
 </div>
-<div class="container">
-    {% for post in posts %}
-        <!-- ===================== -->
-        <!-- TICKET -->
-        <!-- ===================== -->
-        {% if post.content_type == 'TICKET' %}
-            <div class="ticket-card">
-                {% if post.image %}
-                    <img src="{{ post.image.url }}" alt="image ticket">
-                {% endif %}
 
-                <div class="actions">
-                    {% if post.id in reviews_by_ticket %}
-                    <!-- review déjà existante -->
-                    <button class="btn btn-disabled" disabled>
-                        Ce ticket a déjà une review
-                    </button>
-                    {% else %}
-                    <a href="{% url 'newreview' post.id %}" class="btn">
+<div class="container">
+
+{% for item in posts_with_actions %}
+    {% with post=item.post actions=item.actions %}
+
+    <!-- ===================== -->
+    <!-- TICKET -->
+    <!-- ===================== -->
+    {% if post.content_type == "TICKET" %}
+
+        <div class="ticket-card">
+
+            {% if post.image %}
+                <img src="{{ post.image.url }}" alt="image ticket">
+            {% endif %}
+
+            <p>
+                {{ post.user.username }} -
+                {{ post.time_created|date:"d/m/Y H:i" }}
+            </p>
+
+            <h2>{{ post.title }}</h2>
+            <p>{{ post.description }}</p>
+
+            <!-- ===================== -->
+            <!-- ACTIONS TICKET / REVIEW -->
+            <!-- ===================== -->
+            <div class="post-actions">
+
+                {% if actions.can_edit_ticket %}
+
+                    <a href="{% url 'edit_ticket' post.id %}" class="btn btn-edit">
+                        Modifier le ticket
+                    </a>
+
+                    <a href="{% url 'delete_ticket' post.id %}" class="btn btn-delete">
+                        Annuler le ticket
+                    </a>
+
+                {% elif actions.can_edit_review %}
+
+                    <a href="{% url 'edit_review' actions.review.id %}" class="btn btn-edit">
+                        Modifier la review
+                    </a>
+
+                    <a href="{% url 'delete_review' actions.review.id %}" class="btn btn-delete">
+                        Annuler la review
+                    </a>
+
+                {% elif actions.can_add_review %}
+
+                    <a href="{% url 'newreview' post.id %}" class="btn btn-primary">
                         Ajouter une review
                     </a>
-                    {% endif %}
 
-                <!-- Actions du user connecté -->
-                {% if post.user == request.user %}
-                <a href="{% url 'edit_ticket' post.id %}" class="btn btn-edit">
-                Modifier
-            </a>
-            <a href="{% url 'delete_ticket' post.id %}" class="btn btn-delete">
-                Supprimer
-            </a>
-        {% endif %}
-    </div>
-</div>
-{% endif %}
-
-                <p>
-                    {{ post.user.username }} -
-                    {{ post.time_created|date:"d/m/Y H:i" }}
-                </p>
-                <h2>{{ post.title }}</h2>
-                <p>{{ post.description }}</p>
-            </div>
-        {% endif %}
-        <!-- ===================== -->
-        <!-- REVIEW -->
-        <!-- ===================== -->
-        {% if post.content_type == 'REVIEW' %}
-            <div class="review-card">
-                <div class="review-header">
-                    <strong>{{ post.headline }}</strong>
-                    <span>RATING = {{ post.rating }}</span>
-
-                    <span>
-                        {% for i in rating_range %}
-                            {% if i <= post.rating %}
-                                ★
-                            {% else %}
-                                ☆
-                            {% endif %}
-                        {% endfor %}
-                    </span>
-                    <em>
-                        sur "{{ post.ticket.title }}" -
-                        {{ post.time_created|date:"d/m/Y H:i" }}
-                    </em>
-                </div>
-                <div class="review-body">
-                    {{ post.body }}
-                </div>
-            </div>
-            <!-- ticket associé -->
-            <div class="ticket-card">
-                {% if post.ticket.image %}
-                    <img src="{{ post.ticket.image.url }}" alt="image ticket">
                 {% endif %}
-                <p>
-                    {{ post.ticket.user.username }} -
-                    {{ post.ticket.time_created|date:"d/m/Y H:i" }}
-                </p>
-                <h2>{{ post.ticket.title }}</h2>
-                <p>{{ post.ticket.description }}</p>
+
             </div>
-        {% endif %}
-    {% empty %}
-        <p>Aucune publication.</p>
-    {% endfor %}
+        </div>
+
+    {% endif %}
+
+    <!-- ===================== -->
+    <!-- REVIEW -->
+    <!-- ===================== -->
+    {% if post.content_type == "REVIEW" %}
+
+        <div class="review-card">
+
+            <div class="review-header">
+                <strong>{{ post.headline }}</strong>
+
+                <!-- ⭐ rating -->
+                <span class="rating">
+                    {% for i in rating_range %}
+                        {% if i <= post.rating %}
+                            ★
+                        {% else %}
+                            ☆
+                        {% endif %}
+                    {% endfor %}
+                </span>
+
+                <em>
+                    sur "{{ post.ticket.title }}" -
+                    {{ post.time_created|date:"d/m/Y H:i" }}
+                </em>
+            </div>
+
+            <div class="review-body">
+                {{ post.body }}
+            </div>
+
+            <!-- ===================== -->
+            <!-- ACTIONS REVIEW -->
+            <!-- ===================== -->
+            <div class="post-actions">
+
+                {% if actions.can_edit_review %}
+
+                    <a href="{% url 'edit_review' post.id %}" class="btn btn-edit">
+                        Modifier la review
+                    </a>
+
+                    <a href="{% url 'delete_review' post.id %}" class="btn btn-delete">
+                        Annuler la review
+                    </a>
+
+                {% endif %}
+
+            </div>
+        </div>
+
+    {% endif %}
+
+    {% endwith %}
+{% empty %}
+    <p>Aucune publication.</p>
+{% endfor %}
+
 </div>
+
 {% endblock %}
