@@ -1,120 +1,96 @@
 {% extends "base.html" %}
-{% load dict_extras %}
-
 {% block content %}
-
-
-    <h1 class="feed-title">Flux</h1>
-
-    <div class="action-buttons-feed">
+<h1 class="feed-title">Feed</h1>
+<div class="action-buttons-feed">
     <a href="{% url 'newticket' %}" class="header-btn btn">Créer un ticket</a>
     <a href="{% url 'ticketreview' %}" class="header-btn btn">Créer une review</a>
+</div>
+<div class="container">
+    {% for post in posts %}
+        <!-- ===================== -->
+        <!-- TICKET -->
+        <!-- ===================== -->
+        {% if post.content_type == 'TICKET' %}
+            <div class="ticket-card">
+                {% if post.image %}
+                    <img src="{{ post.image.url }}" alt="image ticket">
+                {% endif %}
+
+                <div class="actions">
+                    {% if post.id in reviews_by_ticket %}
+                    <!-- review déjà existante -->
+                    <button class="btn btn-disabled" disabled>
+                        Ce ticket a déjà une review
+                    </button>
+                    {% else %}
+                    <a href="{% url 'newreview' post.id %}" class="btn">
+                        Ajouter une review
+                    </a>
+                    {% endif %}
+
+                <!-- Actions du user connecté -->
+                {% if post.user == request.user %}
+                <a href="{% url 'edit_ticket' post.id %}" class="btn btn-edit">
+                Modifier
+            </a>
+            <a href="{% url 'delete_ticket' post.id %}" class="btn btn-delete">
+                Supprimer
+            </a>
+        {% endif %}
     </div>
+</div>
+{% endif %}
 
-    <div class="container">
-
-    {% for post in tickets %}
-    <!--for parcours tous les tickets un par un-->
-    <!-- REVIEW au dessus-->
-        {% if reviews_by_ticket|get_item:post.id %}
-            {% for review in reviews_by_ticket|get_item:post.id %}
-            <!--get_item fn python récupère la valeur du dictionnaire 
-            reviews_by_ticket associée à la clé post.id -->
-                <div class="review-card">
-                <!-- HEADER (étoiles + auteur headline+ + date) -->
+                <p>
+                    {{ post.user.username }} -
+                    {{ post.time_created|date:"d/m/Y H:i" }}
+                </p>
+                <h2>{{ post.title }}</h2>
+                <p>{{ post.description }}</p>
+            </div>
+        {% endif %}
+        <!-- ===================== -->
+        <!-- REVIEW -->
+        <!-- ===================== -->
+        {% if post.content_type == 'REVIEW' %}
+            <div class="review-card">
                 <div class="review-header">
-                    <strong par: class= "review-headline">  
-                        {{ review.headline }}
-                    </strong>
+                    <strong>{{ post.headline }}</strong>
+                    <span>RATING = {{ post.rating }}</span>
 
-                    <span class="rating">
+                    <span>
                         {% for i in rating_range %}
-                            {% if i <= review.rating %}
+                            {% if i <= post.rating %}
                                 ★
                             {% else %}
                                 ☆
                             {% endif %}
                         {% endfor %}
                     </span>
-
-                    <em class="review-meta">
-                    Review par {{ review.user.username }} le 
-                    {{ review.time_created|date:"d/m/Y H:i" }}
+                    <em>
+                        sur "{{ post.ticket.title }}" -
+                        {{ post.time_created|date:"d/m/Y H:i" }}
                     </em>
                 </div>
-
-                    <div class="review-body"> Commentaire: 
-                        {{ review.body }}
-                    </div>
-
-                    <!-- ACTIONS REVIEW (uniquement si auteur review) -->
-                {% if review.user == request.user %}
-                    <div class="post-actions">
-
-                        <a href="{% url 'edit_review' review.id %}" class="btn btn-edit">
-                            Modifier la review
-                        </a>
-
-                        <a href="{% url 'delete_review' review.id %}" class="btn btn-delete">
-                            Annuler la review
-                        </a>
-
-                    </div>
-                {% endif %}
-            </div>
-        {% endfor %}
-    {% endif %}
-        <!-- Ticket -->
-        <div class="ticket-card">
-            <div class="ticket-header">
-            {% if post.image %}
-                <div class="ticket-image">
-                    <img src="{{ post.image.url }}" alt="Image du ticket">
+                <div class="review-body">
+                    {{ post.body }}
                 </div>
-            {% endif %}
-
-            <div class="ticket-info">
-                <p class="ticket-meta">
-                    {{ post.user.username }} - le 
-                    {{ post.time_created|date:"d/m/Y H:i" }}
-                </p>
-                <h2 class="ticket-title">{{ post.title }}</h2>
-                <p class="ticket-description"> {{ post.description }}</p>
-
-                <!-- BOUTON AJOUTER UNE REVIEW/ BOUTON GRISÉ -->
-                {% if post.id in reviews_by_ticket %}
-                    <button class="btn btn-disabled" 
-                    disabled> Ce ticket a déjà une réponse
-                    </button>
-                {% else %}
-                    {% if post.user.id == request.user.id or post.user.id in following_ids %}
-                        <a href="{% url 'newreview' post.id %}" class="btn">
-                        Ajouter une review
-                        </a>
-                    {% endif %}
-                {% endif %}
-                <!-- ACTIONS TICKET (si auteur ticket ET pas de review ou review supprimée) -->
-                {% if post.user == request.user %}
-                    <div class="post-actions">
-                        <a href="{% url 'edit_ticket' post.id %}" class="btn btn-edit">
-                            Modifier le ticket
-                        </a>
-                        <a href="{% url 'delete_ticket' post.id %}" class="btn btn-delete">
-                            Supprimer le ticket
-                        </a>
-                    </div>
-
-                {% endif %}
-
             </div>
-
-        </div>
-
-    </div>
-
-{% empty %}
-    <p>Aucun ticket disponible.</p>
-{% endfor %}
-
+            <!-- ticket associé -->
+            <div class="ticket-card">
+                {% if post.ticket.image %}
+                    <img src="{{ post.ticket.image.url }}" alt="image ticket">
+                {% endif %}
+                <p>
+                    {{ post.ticket.user.username }} -
+                    {{ post.ticket.time_created|date:"d/m/Y H:i" }}
+                </p>
+                <h2>{{ post.ticket.title }}</h2>
+                <p>{{ post.ticket.description }}</p>
+            </div>
+        {% endif %}
+    {% empty %}
+        <p>Aucune publication.</p>
+    {% endfor %}
 </div>
 {% endblock %}
