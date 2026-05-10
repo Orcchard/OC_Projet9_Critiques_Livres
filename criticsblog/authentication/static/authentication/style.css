@@ -1,0 +1,326 @@
+html,
+body {
+    overflow-x: hidden;
+}
+
+/* ===== STYLES GLOBAUX ===== */
+* {
+    margin: 0;
+    padding: 0;
+    box-sizing: border-box;
+}
+
+body {
+    font-family: Arial, sans-serif;
+    background-color: #f5f5f5;
+    min-height: 100vh;
+}
+
+/* ===== HEADER (commun aux différentes pages) ===== */
+.header {
+    width: 100%;
+    position: relative;
+    /* nécessaire pour les boutons en absolute */
+    text-align: center;
+    font-size: 12px;
+    font-weight: bold;
+    padding: 5px 0;
+    /*border-bottom: 2px solid #ccc;*/
+    background-color: white;
+    margin-bottom: 20px;
+}
+
+.header-left {
+    text-align: left;
+}
+
+.header-title {
+    margin-top: 30px;
+}
+
+/* ===== BOUTONS DU HEADER ===== */
+.action-main-buttons {
+    position: absolute;
+    top: 50%;
+    /* centre verticalement par rapport au header */
+    right: 20px;
+    /* marge à droite */
+    transform: translateY(-90%);
+    /* remonte les bouton dans moitié du header en hauteur */
+}
+
+.header-btn {
+    display: inline-block;
+    /* permet padding et width */
+    padding: 8px 16px;
+    /* boutons réduits */
+    font-size: 12px;
+    /* texte plus petit */
+    font-weight: bold;
+    border-radius: 15px;
+    /* arrondi */
+    background-color: #e0e0e0;
+    color: black;
+    text-decoration: none;
+    transition: background-color 0.3s;
+    margin-left: 6px;
+    /* espace entre boutons */
+}
+
+.header-btn:hover {
+    background-color: #1694c9;
+    /* hover foncé */
+}
+
+/* Structure des actions */
+.ticket-actions {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    margin-top: 20px;
+    padding-top: 10px;
+    /*border-top: 1px solid #ddd;*/
+}
+
+.actions-left,
+.review-actions {
+    text-align: left;
+}
+
+.actions-right {
+    text-align: right;
+}
+
+/* Boutons */
+.btn {
+    display: inline-block;
+    padding: 6px 12px;
+    margin: 0 5px;
+    border-radius: 4px;
+    text-decoration: none;
+    font-size: 14px;
+    cursor: pointer;
+}
+
+.btn-edit {
+    background-color: #ffc107;
+    color: #000;
+    border: none;
+}
+
+.btn-delete {
+    background-color: #dc3545;
+    color: #fff;
+    border: none;
+}
+
+.btn-reply {
+    background-color: #007bff;
+    color: #fff;
+    border: none;
+}
+
+.btn-disabled {
+    background-color: #6c757d;
+    color: #fff;
+    opacity: 0.65;
+    cursor: not-allowed;
+}
+
+.btn-edit:hover,
+.btn-delete:hover,
+.btn-reply:hover {
+    opacity: 0.8;
+}
+
+/* Container pour le feed (sans cadre) */
+.feed-container {
+    max-width: 900px;
+    margin: 0;
+    padding: 20px;
+    background-color: transparent;
+}
+
+/* Cartes */
+.ticket-card,
+.review-card {
+    background-color: #fff;
+    border: 2px solid #333;
+    border-radius: 8px;
+    padding: 20px;
+    margin-bottom: 20px;
+    box-shadow: 0 4px 8px rgba(0, 0, 0, 0.15);
+}
+
+.ticket-content h2,
+.review-header h2 {
+    font-size: 18px;
+    margin: 10px 0;
+}
+
+
+.review-ticket {
+    background-color: transparent;
+    border-radius: 0;
+    padding: 12px;
+    margin: 15px 0;
+}
+
+/* Ligne de séparation entre review et ticket associé */
+.review-ticket-separator {
+    border: none;
+    border-top: 1px dashed #999;
+    margin: 15px 0;
+}
+
+/* Images */
+.ticket-image {
+    max-width: 150px;
+    max-height: 150px;
+    margin-top: 10px;
+}
+
+.ticket-image-mini {
+    max-width: 100px;
+    max-height: 100px;
+}
+
+/* Rating */
+.rating {
+    font-size: 20px;
+    color: #ffc107;
+    margin: 5px 0;
+}
+
+/* Textes */
+.text-center {
+    text-align: center;
+}
+
+.ticket-meta,
+.review-meta,
+.ticket-owner,
+.ticket-date {
+    color: #666;
+    font-size: 12px;
+    margin: 5px 0;
+}
+
+/* ===== PAGE D'INSCRIPTION mon encadrement principal */
+/* ===== PAGE DE CONNEXION ===== */
+.split-container {
+    display: flex;
+    width: 1000px;
+    max-width: 1000px;
+    min-height: 500px;
+    border: 2px solid black;
+    margin: 0 auto;
+    background-color: white;
+}
+
+.container {
+    max-width: 900px;
+    margin: 0;
+    padding: 20px;
+    background-color: transparent;
+}
+
+/* Surcharge pour la page home uniquement */
+.container.home-page {
+    max-width: 1000px;
+    width: 85%;
+    margin: 30px auto;
+    padding: 50px 40px;
+    /* Padding haut/bas augmenté */
+    min-height: 500px;
+    /* Hauteur minimum */
+    height: auto;
+    /* S'adapte au contenu */
+    border: 3px solid #333;
+    border-radius: 15px;
+    background-color: #fff;
+    box-shadow: 0 6px 16px rgba(0, 0, 0, 0.2);
+}
+
+/* Classe subscriptions (spécifique) */
+.subscriptions {
+    background-color: #fff;
+    border-radius: 10px;
+    padding: 20px;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+}
+
+/* Subscribe*/
+.search-form {
+    display: flex;
+    gap: 10px;
+    align-items: center;
+    margin-bottom: 15px;
+}
+
+/* champ de recherche */
+.search-form input[type="text"] {
+    flex: 1;
+    padding: 8px 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    font-size: 14px;
+    background-color: #fff;
+    transition: border 0.3s;
+}
+
+.search-form input[type="text"]:focus {
+    outline: none;
+    border-color: #007bff;
+}
+
+/* bouton recherche (si tu en ajoutes un) */
+.search-form button {
+    padding: 5px 10px;
+    background-color: #007bff;
+    color: white;
+    border: none;
+    border-radius: 4px;
+    cursor: pointer;
+    font-weight: bold;
+    transition: background-color 0.3s;
+}
+
+.search-form button:hover {
+    background-color: #0056b3;
+}
+
+.user-list {
+    display: flex;
+    flex-direction: column;
+    gap: 3px;
+}
+
+.user-item {
+    display: flex;
+    justify-content: space-between;
+    align-items: center;
+    padding: 3px;
+    border-bottom: 1px solid #ddd;
+}
+
+.btn-following {
+    padding: 5px 10px;
+    background-color: #007bff;
+    color: white;
+    border: 1px solid #007bff;
+    border-radius: 4px;
+    text-decoration: none;
+    border-radius: 4px;
+    font-size: 16px;
+    text-align: center;
+    cursor: pointer;
+    font-weight: bold;
+    display: inline-block;
+    transition: background-color 0.3s, border-color 0.3s;
+}
+
+.btn-following:hover {
+    background-color: #0056b3;
+    border-color: #0056b3;
+}
