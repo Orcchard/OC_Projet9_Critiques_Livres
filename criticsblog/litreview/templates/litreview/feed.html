@@ -1,133 +1,26 @@
 {% extends "base.html" %}
 {% block content %}
 
-<h1 class="feed-title">Feed</h1>
+<h1>Feed</h1>
 
 <div class="action-buttons-feed">
     <a href="{% url 'newticket' %}" class="header-btn btn">Créer un ticket</a>
     <a href="{% url 'ticketreview' %}" class="header-btn btn">Créer une review</a>
 </div>
 
-<div class="container">
-
-{% for item in posts_with_actions %}
-    {% with post=item.post actions=item.actions %}
-
-    <!-- ===================== -->
-    <!-- TICKET -->
-    <!-- ===================== -->
-    {% if post.content_type == "TICKET" %}
-
-        <div class="ticket-card">
-
-            {% if post.image %}
-                <img src="{{ post.image.url }}" alt="image ticket">
-            {% endif %}
-
-            <p>
-                {{ post.user.username }} -
-                {{ post.time_created|date:"d/m/Y H:i" }}
-            </p>
-
-            <h2>{{ post.title }}</h2>
-            <p>{{ post.description }}</p>
-
-            <!-- ===================== -->
-            <!-- ACTIONS TICKET / REVIEW -->
-            <!-- ===================== -->
-            <div class="post-actions">
-
-                {% if actions.can_edit_ticket %}
-
-                    <a href="{% url 'edit_ticket' post.id %}" class="btn btn-edit">
-                        Modifier le ticket
-                    </a>
-
-                    <a href="{% url 'delete_ticket' post.id %}" class="btn btn-delete">
-                        Annuler le ticket
-                    </a>
-
-                {% elif actions.can_edit_review %}
-
-                    <a href="{% url 'edit_review' actions.review.id %}" class="btn btn-edit">
-                        Modifier la review
-                    </a>
-
-                    <a href="{% url 'delete_review' actions.review.id %}" class="btn btn-delete">
-                        Annuler la review
-                    </a>
-
-                {% elif actions.can_add_review %}
-
-                    <a href="{% url 'newreview' post.id %}" class="btn btn-primary">
-                        Ajouter une review
-                    </a>
-
-                {% endif %}
-
-            </div>
-        </div>
-
-    {% endif %}
-
-    <!-- ===================== -->
-    <!-- REVIEW -->
-    <!-- ===================== -->
-    {% if post.content_type == "REVIEW" %}
-
-        <div class="review-card">
-
-            <div class="review-header">
-                <strong>{{ post.headline }}</strong>
-
-                <!-- ⭐ rating -->
-                <span class="rating">
-                    {% for i in rating_range %}
-                        {% if i <= post.rating %}
-                            ★
-                        {% else %}
-                            ☆
-                        {% endif %}
-                    {% endfor %}
-                </span>
-
-                <em>
-                    sur "{{ post.ticket.title }}" -
-                    {{ post.time_created|date:"d/m/Y H:i" }}
-                </em>
-            </div>
-
-            <div class="review-body">
-                {{ post.body }}
-            </div>
-
-            <!-- ===================== -->
-            <!-- ACTIONS REVIEW -->
-            <!-- ===================== -->
-            <div class="post-actions">
-
-                {% if actions.can_edit_review %}
-
-                    <a href="{% url 'edit_review' post.id %}" class="btn btn-edit">
-                        Modifier la review
-                    </a>
-
-                    <a href="{% url 'delete_review' post.id %}" class="btn btn-delete">
-                        Annuler la review
-                    </a>
-
-                {% endif %}
-
-            </div>
-        </div>
-
-    {% endif %}
-
-    {% endwith %}
-{% empty %}
-    <p>Aucune publication.</p>
-{% endfor %}
-
+<div class="feed-container">
+    {% for post in posts %}
+        
+        {% if post.content_type == 'TICKET' %}            
+            {% include "litreview/ticket_snippet.html" with post=post %}
+            
+        {% elif post.content_type == 'REVIEW' %}            
+            {% include "litreview/review_snippet.html" with post=post %}
+            
+        {% endif %}
+    {% empty %}
+        <p class="text-center">Aucun post pour le moment.</p>
+    {% endfor %}
 </div>
 
 {% endblock %}
