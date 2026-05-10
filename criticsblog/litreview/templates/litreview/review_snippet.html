@@ -1,0 +1,41 @@
+<div class="review-card">
+    <div class="review-header">
+        <p class="review-meta">
+            {{ post.user.username }} a publié une critique
+            le {{ post.time_created|date:"d/m/Y H:i" }}
+        </p>
+        <h2>{{ post.headline }}</h2>
+        <div class="rating">
+            {% for i in rating_range %}
+                {% if i <= post.rating %}
+                    ★
+                {% else %}
+                    ☆
+                {% endif %}
+            {% endfor %}
+        </div>
+    </div>
+
+    <div class="review-body">
+        <p>{{ post.body }}</p>
+    </div>
+
+    <hr class="review-ticket-separator">
+
+    <div class="review-ticket">
+        <p class="ticket-owner">Ticket de {{ post.ticket.user.username }}</p>
+        <h3>{{ post.ticket.title }}</h3>
+        <p>{{ post.ticket.description }}</p>
+        {% if post.ticket.image %}
+            <img src="{{ post.ticket.image.url }}" alt="Image du ticket" class="ticket-image-mini">
+        {% endif %}
+        <p class="ticket-date">Créé le {{ post.ticket.time_created|date:"d/m/Y H:i" }}</p>
+    </div>
+
+    <div class="review-actions">
+        {% if post.user == request.user %}
+            <a href="{% url 'edit_review' post.id %}" class="btn btn-edit">Modifier la review</a>
+            <a href="{% url 'delete_review' post.id %}" class="btn btn-delete">Annuler la review</a>
+        {% endif %}
+    </div>
+</div>
