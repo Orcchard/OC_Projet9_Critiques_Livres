@@ -3,8 +3,8 @@
 <head>
 <meta charset="UTF-8">
 <title>{% block title %} LITReview  {% endblock %} </title>
-    {% load static %}
-    <link rel="stylesheet" href="{% static 'authentication/mixt.css' %}">
+{% load static %}
+    <link rel="stylesheet" href="{% static 'authentication/style.css' %}">
 </head>
 
 <body>    
@@ -28,7 +28,6 @@
             </form>
             <a href="{% url 'feed' %}" class="header-btn">flux</a>
             <a href="{% url 'subscribe' %}" class="header-btn">Souscription</a>
-            <a href="{% url 'post' %}" class="header-btn">Mes publications</a>
             <a href="{% url 'login' %}" class="header-btn">Se deconnecter</a>
             
         </div>

@@ -21,10 +21,9 @@ from authentication.views import subscribe_page, follow_user_page, unfollow_user
 from litreview.views import newticket_page, newreview_page
 from litreview.views import create_ticket_and_review_page
 from litreview.views import edit_ticket, delete_ticket, edit_review
-from litreview.views import feed, delete_review, post
+from litreview.views import feed, delete_review
 from django.conf import settings
 from django.conf.urls.static import static
-
 
 
 urlpatterns = [
@@ -40,7 +39,6 @@ urlpatterns = [
     path('follow_user/<int:user_id>/', follow_user_page, name='followuser'),
     path('unfollow_user/<int:user_id>/', unfollow_user_page, name='unfollowuser'),
     path('feed/', feed, name='feed'),
-    path('post/', post, name='post'),
     path('ticket/newticket/<int:ticket_id>', newticket_page, name='newticket'),
     path('ticket/newticket/', newticket_page, name='newticket'),
     path('review/newreview/<int:ticket_id>', newreview_page, name='newreview'),
