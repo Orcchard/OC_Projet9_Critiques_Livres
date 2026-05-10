@@ -32,6 +32,4 @@ def get_users_viewable_reviews(user):
 
     allowed_users = list(followed_users) + [user.id]
 
-    return Review.objects.filter(
-        user_id__in=allowed_users
-    )
+    return Review.objects.filter(user_id__in=allowed_users)
