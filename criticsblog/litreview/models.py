@@ -2,6 +2,8 @@ from django.db import models
 from django.conf import settings
 from django.core.validators import MinValueValidator, MaxValueValidator
 from django.utils import timezone
+# from .models import Review
+
 
 
 class Ticket(models.Model):
@@ -21,6 +23,12 @@ class Ticket(models.Model):
 
     def __str__(self):
         return f'{self.title} by {self.user} - {self.time_created}'
+    #  Vérification des droits
+
+    def has_reviewed(self):
+        """Vérifie si on a déjà posté une review sur ce ticket"""
+        # pylint: disable=no-member
+        return self.review_set.exists()
 
 
 class Review(models.Model):
@@ -37,8 +45,6 @@ class Review(models.Model):
 
     def __str__(self):
         return f'{self.headline} by {self.user} - {self.time_created}'
-
-
     class Meta:
         constraints = [
             models.UniqueConstraint(
