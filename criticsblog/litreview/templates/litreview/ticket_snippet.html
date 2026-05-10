@@ -16,7 +16,7 @@
 
     <div class="ticket-actions">
         <div class="actions-left">
-            {% if post.user == request.user %}
+            {% if post.user == request.user and not post.has_review %}
                 <a href="{% url 'edit_ticket' post.id %}" class="btn btn-edit">Modifier le ticket</a>
                 <a href="{% url 'delete_ticket' post.id %}" class="btn btn-delete">Annuler le ticket</a>
             {% endif %}
