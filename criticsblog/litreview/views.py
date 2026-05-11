@@ -156,11 +156,13 @@ def feed(request):
 
     # tickets visibles
     tickets = get_users_viewable_tickets(request.user)
+    # Pour QUI je dois filtrer les tickets
     tickets = tickets.annotate(content_type=Value('TICKET', CharField()))
     print(f"TT: {tickets}")
 
     # reviews visibles
     reviews = get_users_viewable_reviews(request.user)
+    # Pour QUI je dois filtrer les reviews
     reviews = reviews.annotate(content_type=Value('REVIEW', CharField()))
     print(f"RR: {reviews}")
 

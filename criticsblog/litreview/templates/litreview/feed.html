@@ -11,7 +11,7 @@
 <div class="feed-container">
     {% for post in posts %}
         
-        {% if post.content_type == 'TICKET'  and not post.has_review%}            
+        {% if post.content_type == 'TICKET' %}            
             {% include "litreview/ticket_snippet.html" with post=post %}
             
         {% elif post.content_type == 'REVIEW' %}            

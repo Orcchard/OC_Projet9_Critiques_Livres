@@ -5,7 +5,6 @@ from django.utils import timezone
 # from .models import Review
 
 
-
 class Ticket(models.Model):
     """missing"""
     title = models.CharField(max_length=128)
@@ -25,7 +24,7 @@ class Ticket(models.Model):
         return f'{self.title} by {self.user} - {self.time_created}'
     #  Vérification des droits
 
-    def has_reviewed(self):
+    def has_review(self):
         """Vérifie si on a déjà posté une review sur ce ticket"""
         # pylint: disable=no-member
         return self.review_set.exists()
