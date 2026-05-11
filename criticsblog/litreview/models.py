@@ -24,11 +24,6 @@ class Ticket(models.Model):
         return f'{self.title} by {self.user} - {self.time_created}'
     #  Vérification des droits
 
-    def has_review(self):
-        """Vérifie si on a déjà posté une review sur ce ticket"""
-        # pylint: disable=no-member
-        return self.review_set.exists()
-
 
 class Review(models.Model):
     """Missing"""
