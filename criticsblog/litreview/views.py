@@ -157,13 +157,11 @@ def feed(request):
     # tickets visibles
     tickets = get_users_viewable_tickets(request.user)
     # Pour QUI je dois filtrer les tickets
-    tickets = tickets.annotate(content_type=Value('TICKET', CharField()))
     print(f"TT: {tickets}")
 
     # reviews visibles
     reviews = get_users_viewable_reviews(request.user)
     # Pour QUI je dois filtrer les reviews
-    reviews = reviews.annotate(content_type=Value('REVIEW', CharField()))
     print(f"RR: {reviews}")
 
     posts = sorted(
@@ -178,6 +176,29 @@ def feed(request):
     })
 
 
+from itertools import chain
+from django.contrib.auth.decorators import login_required
+from django.shortcuts import render
+
+from litreview.services import (
+    get_user_tickets,
+    get_user_reviews
+)
+
+
 @login_required
-def mypublications(request):
-    pass
+def my_publications(request):
+
+    tickets = get_user_tickets(request.user)
+    reviews = get_user_reviews(request.user)
+
+    posts = sorted(
+        chain(tickets, reviews),
+        key=lambda x: x.time_created,
+        reverse=True
+    )
+
+    return render(request, "litreview/feed.html", {
+        "posts": posts,
+        "rating_range": range(6)
+    })
