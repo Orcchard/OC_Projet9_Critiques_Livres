@@ -19,7 +19,7 @@ from django.urls import path
 from authentication.views import signup_page, login_page, home, logout_user
 from authentication.views import subscribe_page, follow_user_page, unfollow_user_page
 from litreview.views import newticket_page, newreview_page
-from litreview.views import create_ticket_and_review_page
+from litreview.views import create_ticket_and_review_page, my_publications
 from litreview.views import edit_ticket, delete_ticket, edit_review
 from litreview.views import feed, delete_review
 from django.conf import settings
@@ -39,13 +39,13 @@ urlpatterns = [
     path('follow_user/<int:user_id>/', follow_user_page, name='followuser'),
     path('unfollow_user/<int:user_id>/', unfollow_user_page, name='unfollowuser'),
     path('feed/', feed, name='feed'),
+    path('my_publications/', my_publications, name='my_publications'),
     path('ticket/newticket/<int:ticket_id>', newticket_page, name='newticket'),
     path('ticket/newticket/', newticket_page, name='newticket'),
     path('review/newreview/<int:ticket_id>', newreview_page, name='newreview'),
     path('review/ticketreview/', create_ticket_and_review_page, name='ticketreview'),
     path('ticket/edit/<int:ticket_id>/', edit_ticket, name='edit_ticket'),
     path('ticket/delete/<int:ticket_id>/', delete_ticket, name='delete_ticket'),
-
     path('review/edit/<int:review_id>/', edit_review, name='edit_review'),
     path('review/delete/<int:review_id>/', delete_review, name='delete_review'),
 ]
