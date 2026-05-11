@@ -1,4 +1,5 @@
 <div class="ticket-card">
+
     <div class="ticket-header">
         <p class="ticket-meta">
             {{ post.user.username }} a demandé une critique
@@ -8,30 +9,49 @@
 
     <div class="ticket-content">
         <h2>{{ post.title }}</h2>
+
         <p>{{ post.description }}</p>
+
         {% if post.image %}
-            <img src="{{ post.image.url }}" alt="Image du ticket" class="ticket-image">
+            <img src="{{ post.image.url }}"
+                alt="Image du ticket"
+                class="ticket-image">
         {% endif %}
     </div>
 
     <div class="ticket-actions">
+
         <div class="actions-left">
+
             {% if post.user == request.user %}
-                {% if not post.has_review or post.review.user != request.user %}
-                    <a href="{% url 'edit_ticket' post.id %}" class="btn btn-edit">Modifier le ticket</a>
-                    <a href="{% url 'delete_ticket' post.id %}" class="btn btn-delete">Annuler le ticket</a>
-                {% endif %}
+                <a href="{% url 'edit_ticket' post.id %}"
+                class="btn btn-edit">
+                Modifier le ticket
+                </a>
+
+                <a href="{% url 'delete_ticket' post.id %}"
+                class="btn btn-delete">
+                Annuler le ticket
+                </a>
             {% endif %}
 
-        
-        
-            <div class="actions-right">
-                {% if not post.has_review %}
-                    <a href="{% url 'newreview' post.id %}" class="btn btn-reply">Répondre</a>
-                {% else %}
-                    <span class="btn btn-disabled">Review déjà saisie</span>
-                {% endif %}
-            </div>
         </div>
+
+        <div class="actions-right">
+
+            {% if not post.has_review %}
+                <a href="{% url 'newreview' post.id %}"
+                class="btn btn-reply">
+                Répondre
+                </a>
+            {% else %}
+                <span class="btn btn-disabled">
+                    Review déjà saisie
+                </span>
+            {% endif %}
+
+        </div>
+
     </div>
+
 </div>
