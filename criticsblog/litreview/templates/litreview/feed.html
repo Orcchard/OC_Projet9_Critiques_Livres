@@ -16,8 +16,8 @@
             
         {% elif post.content_type == 'REVIEW' %}            
             {% include "litreview/review_snippet.html" with post=post %}
-            
         {% endif %}
+        
     {% empty %}
         <p class="text-center">Aucun post pour le moment.</p>
     {% endfor %}
