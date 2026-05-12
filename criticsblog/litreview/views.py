@@ -8,6 +8,7 @@ from . import forms
 from itertools import chain
 from django.db.models import CharField, Value
 from litreview.services import get_users_viewable_tickets, get_users_viewable_reviews
+from litreview.services import get_user_tickets, get_user_reviews
 
 
 MAX_RATING = 5
@@ -172,18 +173,9 @@ def feed(request):
 
     return render(request, 'litreview/feed.html', {
         "posts": posts,
-        "rating_range": rating_range
+        "rating_range": rating_range,
+        "page_title": "Feed"
     })
-
-
-from itertools import chain
-from django.contrib.auth.decorators import login_required
-from django.shortcuts import render
-
-from litreview.services import (
-    get_user_tickets,
-    get_user_reviews
-)
 
 
 @login_required
@@ -197,8 +189,12 @@ def my_publications(request):
         key=lambda x: x.time_created,
         reverse=True
     )
+    
+    rating_range = range(MIN_RATING, MAX_RATING + 1)
+    # passe le range des étoiles au template
 
     return render(request, "litreview/feed.html", {
         "posts": posts,
-        "rating_range": range(6)
+        "rating_range": rating_range,
+        "page_title": "My publications"
     })
