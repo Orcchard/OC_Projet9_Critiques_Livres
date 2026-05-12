@@ -1,7 +1,7 @@
 {% extends "base.html" %}
 {% block content %}
 
-<h1>Feed</h1>
+<h1>{{ page_title }}</h1>
 
 <div class="action-buttons-feed">
     <a href="{% url 'newticket' %}" class="header-btn btn">Créer un ticket</a>
@@ -17,7 +17,7 @@
         {% elif post.content_type == 'REVIEW' %}            
             {% include "litreview/review_snippet.html" with post=post %}
         {% endif %}
-        
+
     {% empty %}
         <p class="text-center">Aucun post pour le moment.</p>
     {% endfor %}
